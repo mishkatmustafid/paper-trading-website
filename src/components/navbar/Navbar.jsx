@@ -1,5 +1,6 @@
 import React from "react";
 import ButtonClick from "../buttonClick/ButtonClick";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -15,12 +16,16 @@ const Navbar = () => {
       </div>
       <div className="navbar-collapse justify-content-end">
         <ul className="navbar-nav">
-          <li className="nav-item">
-            <ButtonClick className="btn btn-success mx-2" title="Login" />
-          </li>
-          <li className="nav-item">
-            <ButtonClick className="btn btn-danger" title="Register" />
-          </li>
+          <Link to="/login">
+            <li className="nav-item">
+              <ButtonClick className="btn btn-success mx-2" title="Login" />
+            </li>
+          </Link>
+          <Link to="/register">
+            <li className="nav-item">
+              <ButtonClick className="btn btn-danger" title="Register" />
+            </li>
+          </Link>
         </ul>
       </div>
     </nav>
