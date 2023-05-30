@@ -7,19 +7,20 @@ const SignupPage = () => {
   return (
     <div className="container-fluid  vh-100 d-flex align-items-center justify-content-center custom-background">
       <div
-        style={{ border: "none" }}
-        className="card bg-transparent border-none p-4"
+        style={{ border: "none" ,width: "500px"}}
+        className="card bg-transparent border-none"
       >
-        <h2 className="mb-3 text-center text-white ">Register</h2>
+        <h2 className="mb-5 text-center text-white ">RegIster</h2>
         <form>
           <div className="form-group mb-2">
-            <label className="my-1 fs-5 text-light font-weight-bold">
+            <label className="my-1 fs-5  text-light font-weight-bold">
               Email:
             </label>
             <input
+            
               type="email"
               className="form-control form-control-lg"
-              placeholder="Enter your email"
+              placeholder="enter your email"
             />
           </div>
           <div className="form-group mb-3">
@@ -29,10 +30,33 @@ const SignupPage = () => {
             <input
               type="text"
               className="form-control form-control-lg"
-              placeholder="Enter your password"
+              placeholder="enter your username"
             />
           </div>
-          <div className="form-group mb-3">
+          <div className="row">
+          <div className="form-group mb-3 col-md-6">
+            <label className="my-1 text-light fs-5 font-weight-bold">
+              Password:
+            </label>
+            <input
+              type="password"
+              className="form-control form-control-lg"
+              placeholder="enter your password"
+            />
+          </div>
+          <div className="form-group  mb-4 col-md-6">
+            <label className="my-1 text-light fs-5 font-weight-bold">
+              Confirm Password:
+            </label>
+            <input
+              type="password"
+              className="form-control form-control-lg"
+              placeholder="confirm password"
+            />
+          </div>
+
+          </div>
+          {/* <div className="form-group mb-3">
             <label className="my-1 text-light fs-5 font-weight-bold">
               Password:
             </label>
@@ -51,7 +75,7 @@ const SignupPage = () => {
               className="form-control form-control-lg"
               placeholder="confirm password"
             />
-          </div>
+          </div> */}
           <div className="d-grid">
             <ButtonClick
               title="Register"

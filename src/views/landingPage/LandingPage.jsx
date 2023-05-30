@@ -16,8 +16,8 @@ const LandingPage = () => {
         </div>
         <div className="col-md-6 d-flex align-items-center">
           <div className="p-5">
-            <h1>Welcome to our Trading Platform</h1>
-            <p>
+            <h1 className="text-start">Welcome to our Trading Platform</h1>
+            <p className="text-start"> 
               We are thrilled to have you here, ready to embark on your stock
               trading journey. Our platform provides you with the opportunity to
               buy and sell stocks with ease, all in a risk-free environment.

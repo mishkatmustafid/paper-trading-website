@@ -18,7 +18,7 @@ const Navbar = () => {
         <ul className="navbar-nav">
           <Link to="/login">
             <li className="nav-item">
-              <ButtonClick className="btn btn-success mx-2" title="Login" />
+              <ButtonClick className="btn btn-success mx-5" title="Login" />
             </li>
           </Link>
           <Link to="/register">

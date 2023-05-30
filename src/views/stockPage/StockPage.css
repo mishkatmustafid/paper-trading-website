@@ -1,0 +1,44 @@
+.outer-circle {
+  width: 200px;
+  height: 200px;
+  background: red;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inner-circle {
+  width: 100px;
+  height: 100px;
+  background-color: white;
+  border-radius: 50%;
+}
+
+.custom-div {
+  background-color: gray;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.inner-circle-bottom {
+  width: 200px;
+  height: 200px;
+  background-color: white;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.line {
+  width: 150px;
+  height: 2px;
+  background-color: black;
+  margin-bottom: 10px;
+}
+
+.page {
+  background-color: white;
+}
