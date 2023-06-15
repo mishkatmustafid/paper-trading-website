@@ -1,16 +1,17 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import "./StockCircle.css"
+import "./StockCircle.css";
 
-const StockCircle = ({stockName, icon}) => {
-    return(
-        <div>
-        <div className="d-flex align-items-center justify-content-center rounded-circle stock-logo mb-1">
-            <FontAwesomeIcon icon={icon} style={{color: "#e39246", height: "50px", width: "50px"}} />
-        </div>
-        <p className=" text-center">{stockName}</p>
-        </div>
-    )
+const StockCircle = ({ stockName, icon }) => {
+  return (
+    <>
+      <FontAwesomeIcon
+        icon={icon}
+        style={{ color: "#e39246", height: "30px", width: "30px" }}
+      />
+      <h6 className="text-start">{stockName}</h6>
+    </>
+  );
 };
 
 export default StockCircle;

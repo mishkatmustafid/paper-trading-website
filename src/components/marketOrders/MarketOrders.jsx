@@ -10,8 +10,8 @@ const MarketOrders = ({title}) => {
 
   return (
     <div className="contaner">
-        <p>{title}</p>
-      <table className="table text-dark border">
+        <h6>{title}</h6>
+      <table className="table text-dark border fs-6 text">
         <thead>
           <tr>
             <th>Quantity</th>

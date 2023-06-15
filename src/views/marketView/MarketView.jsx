@@ -7,12 +7,13 @@ const MarketView = () => {
     <div className="container ">
        
      
-      <table className="table">
+      <table className="table border">
         <thead className="thead-light">
           <tr>
             <th className="bg-gray">stock</th>
             <th className="bg-gray">Market Cap</th>
             <th className="bg-gray">Price</th>
+            <th className="bg-gray">Purchase</th>
           </tr>
         </thead>
         <tbody>
