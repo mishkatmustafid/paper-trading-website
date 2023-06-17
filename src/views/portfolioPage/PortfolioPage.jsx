@@ -1,12 +1,15 @@
 import React from "react";
-import "./StockPage.css";
+import "./PortfolioPage.css";
 import MyPieChart from "../../components/piechart/MyPieChart";
+import PageHeading from "../../components/page-heading/PageHeading";
+import Navbar from "../../components/navbar/Navbar";
 
-const StockPage = () => {
+const PortfolioPage = () => {
   return (
-    <div className="container-fluid page p-3 ">
-      <h6>Portfolio Overview</h6>
-      <div className="row p-5">
+    <div className="container-fluid">
+      <Navbar/>
+      <PageHeading title="Portfolio Overview" />
+      <div className="row p-1">
         <div className="col d-flex justify-content-center align-items-center">
           <div className="outer-circle">
             <div className="inner-circle"></div>
@@ -14,7 +17,7 @@ const StockPage = () => {
         </div>
       </div>
 
-      <div className="row">
+      <div className="row p-3">
         <div className="grid row justify-content-center align-items-center">
           <div
             style={{
@@ -76,4 +79,4 @@ const StockPage = () => {
   );
 };
 
-export default StockPage;
+export default PortfolioPage;

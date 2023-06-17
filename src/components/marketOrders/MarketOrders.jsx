@@ -1,12 +1,7 @@
 import React from "react";
 
-const MarketOrders = ({title}) => {
-  const data = [
-    { quantity: 100, price: 2.5, ordervalue: 250 },
-    { quantity: 750, price: 1.8, ordervalue: 1350 },
-    { quantity: 60, price: 0.8, ordervalue: 48 },
-    { quantity: 569, price: 0.8, ordervalue: 455.2 },
-  ];
+const MarketOrders = ({title, marketData}) => {
+ 
 
   return (
     <div className="contaner">
@@ -20,7 +15,7 @@ const MarketOrders = ({title}) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((data, index) => (
+          {marketData.map((data, index) => (
             <tr key={index}>
               <td>{data.quantity}</td>
               <td>{data.price}</td>

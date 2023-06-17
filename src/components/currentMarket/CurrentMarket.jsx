@@ -1,12 +1,12 @@
 import React from "react";
-import { data } from "../../Utils/marketData";
-import ButtonClick from "../../components/buttonClick/ButtonClick";
+import { CurrentMarketData } from "../../Utils/marketData";
+import ButtonClick from "../buttonClick/ButtonClick";
 
-const MarketView = () => {
+
+const CurrentMarket = ({ openModal }) => {
+  
   return (
     <div className="container ">
-       
-     
       <table className="table border">
         <thead className="thead-light">
           <tr>
@@ -17,18 +17,26 @@ const MarketView = () => {
           </tr>
         </thead>
         <tbody>
-          {data.map((item, index) => (
+          {CurrentMarketData.map((item, index) => (
             <tr key={index}>
               <td>{item.code}</td>
               <td>{item.marketCap}</td>
               <td>{item.priceNetVariation}</td>
-              <td><ButtonClick className="btn btn-success" title="buy" /></td>
+              <td>
+                <ButtonClick
+                  className="btn btn-success"
+                  title="buy"
+                  onClick={() => openModal(item.code, item.priceNetVariation)}
+                />
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+     
     </div>
   );
 };
 
-export default MarketView;
+export default CurrentMarket;

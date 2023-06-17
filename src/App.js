@@ -4,9 +4,9 @@ import LandingPage from "./views/landingPage/LandingPage";
 import Dashboard from "./views/dashboard/Dashboard";
 import SignupPage from "./views/auth/signupPage/SignupPage";
 import LoginPage from "./views/auth/loginPage/LoginPage";
-import StockPage from "./views/stockPage/StockPage";
-import MarketView from "./views/marketView/MarketView";
+import StockPage from "./views/portfolioPage/PortfolioPage";
 import MarketOverview from "./views/marketOverview/MarketOverview";
+import LeaderBoard from "./views/leaderboardPage/LeaderBoard";
 
 function App() {
   return (
@@ -17,9 +17,9 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<SignupPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/stock" element={<StockPage />} />
-          <Route path="/market" element={<MarketView />} />
+          <Route path="/portfolio" element={<StockPage />} />
           <Route path="/marketoverview" element={<MarketOverview />} />
+          <Route path="/leaderboard" element={<LeaderBoard />} />
         </Routes>
       </BrowserRouter>
     </div>

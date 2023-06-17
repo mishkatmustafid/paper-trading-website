@@ -9,8 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const SingleStock = ({data, title}) => {
-
+const SingleStock = ({ data, title }) => {
   return (
     <div className="container">
       <div className="row">
@@ -18,12 +17,21 @@ const SingleStock = ({data, title}) => {
           <h6>{title}</h6>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={data}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
+              <CartesianGrid strokeDasharray="5 5" />
+              <XAxis
+                dataKey="month"
+                label={{
+                  value: "Month",
+                  position: "insideBottom",
+                  offset: 2,
+                }}
+              />
+              <YAxis
+                label={{ value: "Price", angle: -90, position: "insideLeft" }}
+              />
               <Tooltip />
               <Legend />
-              <Line type="monotone" dataKey="price" stroke="blue" />
+              <Line type="monotoneX" dataKey="price" stroke="blue" />
             </LineChart>
           </ResponsiveContainer>
         </div>

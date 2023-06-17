@@ -1,19 +1,13 @@
-.providerdata{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center; 
-    margin-top: 10px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    justify-items: center;
-    align-items: center;
 
-}
 
 .custom-list {
     position: relative;
     padding-left: 1.5rem; /* Adjust the padding value as needed */
+  }
+
+  .list-unstyled li:hover {
+    background: var(--custom-background-color);
+    color: whitesmoke;
   }
   
   .custom-list .bullet {
@@ -44,3 +38,10 @@
   .scroll-container::-webkit-scrollbar-thumb {
     background-color: transparent; /* Set the background color of the scrollbar thumb */
   }
+  
+  .custom-modal{
+    border: none;
+  }
+
+ 
+  

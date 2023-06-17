@@ -1,103 +1,118 @@
-import React from "react";
-import MarketView from "../marketView/MarketView";
+import React, { useState } from "react";
 import StockCircle from "../../components/stockCircle/StockCircle";
 import "./MarketOverview.css";
 import {
   faGoogle,
   faBitcoin,
   faAmazon,
+  faApple,
+  faFacebook,
+  faMicrosoft,
 } from "@fortawesome/free-brands-svg-icons";
 import MarketOrders from "../../components/marketOrders/MarketOrders";
 import SingleStock from "../../components/Graph/SingleStock";
+import CurrentMarket from "../../components/currentMarket/CurrentMarket";
+import Modal from "react-modal";
+import PurchaseForm from "../../components/purchase-form/PurchaseForm";
+import { stockData } from "../../Utils/marketData";
+import Navbar from "../../components/navbar/Navbar";
+import PageHeading from "../../components/page-heading/PageHeading";
 
 const MarketOverview = () => {
-  const data = [
-    { stock: "google", month: "Jan", price: 4 },
-    { stock: "google", month: "Feb", price: 8 },
-    { stock: "google", month: "Mar", price: 11.56 },
-    { stock: "google", month: "Apr", price: 1.58 },
-    { stock: "google", month: "May", price: 5.75 },
-    { stock: "google", month: "Jun", price: 7.85 },
+  const [selectedStock, setSelectedStock] = useState("google");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+  const openModal = (stock) => {
+    setIsModalOpen(true);
+    setSelectedStock(stock);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedStock("google");
+  };
+
+  const stockListData = [
+    { icon: faAmazon, stockName: "amazon" },
+    { icon: faBitcoin, stockName: "bitcoin" },
+    { icon: faGoogle, stockName: "google" },
+    {icon: faApple, stockName: "apple"},
+    {icon: faFacebook, stockName: "facebook"},
+    {icon: faMicrosoft, stockName: "microsoft"}
   ];
 
+  const handleListClick = (stockName) => {
+    setSelectedStock(stockName);
+  };
 
   return (
-    <div className="container-fluid  p-1">
-      {/* navbar ; make it a component to resuse*/}
-      <nav className="navbar custom-background p-1 navbar-expand-lg navbar-dark">
-        <div className="navbar-brand">
-          <img
-            src={require("../../assets/trade_logo.png")}
-            alt=""
-            className="mx-2"
-            style={{ height: "50px" }}
-          />
-          Paper Trading
-        </div>
-        <div className="navbar-collapse  justify-content-end mx-2">
-          <div
-            className="rounded-circle d-flex justify-content-center align-items-center bg-light"
-            style={{ width: "50px", height: "50px" }}
-          >
-            <span className="text-primary" style={{ fontSize: "20px" }}>
-              T
-            </span>
-          </div>
-        </div>
-      </nav>
-      <div>
-        <h6 className="text-center">Market Overview</h6>
+    <div className="container-fluid">
+    <Navbar />
+      {/* <div className="p-3">
+    
         <hr />
-      </div>
-      <div className="row">
+      </div> */}
+      <div className="row p-1">
+      <PageHeading title="Market Overview"/>
         <div className="col-md-4  text-start">
-          {/* Content for the first column */}
-
-          <div  className="container">
+          <div className="container">
             <h6 className="text-center">Avialable Products</h6>
-            <ol className="scroll-container custom-list pl-5 pt-3 border">
-              <li className="mb-2">
-                <StockCircle icon={faAmazon} stockName={"amazon"} />
-              </li>
-              <li className="mb-2">
-                <StockCircle icon={faBitcoin} stockName={"bitcoin"} />
-              </li>
-              <li className="mb-2">
-                <StockCircle icon={faGoogle} stockName={"google"} />
-              </li>
-              <li className="mb-2">
-                <StockCircle icon={faBitcoin} stockName={"bitcoin"} />
-              </li>
-            <li className="mb-2">
-                <StockCircle icon={faGoogle} stockName={"google"} />
-              </li>
-            <li className="mb-2">
-                <StockCircle icon={faBitcoin} stockName={"bitcoin"} />
-              </li>
-            <li className="mb-2">
-                <StockCircle icon={faGoogle} stockName={"google"} />
-              </li>
+            <ol className="scroll-container list-unstyled p-3  border rounded">
+              {stockListData.map((item) => {
+                return (
+                  <li
+                    key={item.stockName}
+                    value={item.stockName}
+                    onClick={() => handleListClick(item.stockName)}
+                    className="mb-2 p-2 border rounded"
+                  >
+                    <StockCircle icon={item.icon} stockName={item.stockName} />
+                  </li>
+                );
+              })}
             </ol>
           </div>
           <div>
             <hr />
-            <MarketView />
+            <CurrentMarket openModal={openModal} />
+            {isModalOpen && (
+              <div className="modal-wrapper">
+                <Modal
+                  className="custom-modal"
+                  isOpen={isModalOpen}
+                  onRequestClose={closeModal}
+                >
+                  <PurchaseForm stock={selectedStock}   closeModal={closeModal} />
+                </Modal>
+              </div>
+            )}
           </div>
         </div>
-        <div className="col-md-8">
-
-          <div>
-         <SingleStock data={data} title={data[0].stock} />
-            <div className="row bg-light">
-              <div className="col-md-6 p-2 ">
-                <MarketOrders title="BUY SIDE ORDERS" />
-              </div>
-              <div className="col-md-6 p-2 ">
-                <MarketOrders title="SELL SIDE ORDERS" />
+        {selectedStock && (
+          <div className="col-md-8">
+            <div>
+              <SingleStock
+                data={stockData[selectedStock].graphData} // Use the graphData for the selected stock
+                title={selectedStock}
+              />
+              <div className="row bg-light">
+                <div className="col-md-6 p-2 ">
+                  <MarketOrders
+                    marketData={stockData[selectedStock].buyMarketData}
+                    title="BUY SIDE ORDERS"
+                  />
+                </div>
+                <div className="col-md-6 p-2 ">
+                  <MarketOrders
+                    marketData={stockData[selectedStock].sellMarketData}
+                    title="SELL SIDE ORDERS"
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
