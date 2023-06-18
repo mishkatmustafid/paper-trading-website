@@ -14,22 +14,29 @@ import SingleStock from "../../components/Graph/SingleStock";
 import CurrentMarket from "../../components/currentMarket/CurrentMarket";
 import Modal from "react-modal";
 import PurchaseForm from "../../components/purchase-form/PurchaseForm";
-import { stockData } from "../../Utils/marketData";
+import { CurrentMarketData, stockData } from "../../Utils/marketData";
 import Navbar from "../../components/navbar/Navbar";
 import PageHeading from "../../components/page-heading/PageHeading";
 
 const MarketOverview = () => {
   const [selectedStock, setSelectedStock] = useState("google");
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [selectedStockPrice, setSelectedStockPrice] = useState(0);
 
   const openModal = (stock) => {
-    setIsModalOpen(true);
-    setSelectedStock(stock);
+    console.log(stock);
+    const foundStock = CurrentMarketData.find((item) => item.code === stock);
+    console.log("found", foundStock)
+    if (foundStock) {
+      setSelectedStock(foundStock.code);
+      setSelectedStockPrice(foundStock.priceNetVariation);
+      setIsModalOpen(true);
+    }
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setSelectedStockPrice(0);
     setSelectedStock("google");
   };
 
@@ -37,9 +44,9 @@ const MarketOverview = () => {
     { icon: faAmazon, stockName: "amazon" },
     { icon: faBitcoin, stockName: "bitcoin" },
     { icon: faGoogle, stockName: "google" },
-    {icon: faApple, stockName: "apple"},
-    {icon: faFacebook, stockName: "facebook"},
-    {icon: faMicrosoft, stockName: "microsoft"}
+    { icon: faApple, stockName: "apple" },
+    { icon: faFacebook, stockName: "facebook" },
+    { icon: faMicrosoft, stockName: "microsoft" },
   ];
 
   const handleListClick = (stockName) => {
@@ -48,13 +55,9 @@ const MarketOverview = () => {
 
   return (
     <div className="container-fluid">
-    <Navbar />
-      {/* <div className="p-3">
-    
-        <hr />
-      </div> */}
-      <div className="row p-1">
-      <PageHeading title="Market Overview"/>
+      <Navbar />
+      <div className="row p-1 mt-6">
+        <PageHeading title="Market Overview" />
         <div className="col-md-4  text-start">
           <div className="container">
             <h6 className="text-center">Avialable Products</h6>
@@ -83,7 +86,11 @@ const MarketOverview = () => {
                   isOpen={isModalOpen}
                   onRequestClose={closeModal}
                 >
-                  <PurchaseForm stock={selectedStock}   closeModal={closeModal} />
+                  <PurchaseForm
+                    stock={selectedStock}
+                    price={parseFloat(selectedStockPrice.substring(1))}
+                    closeModal={closeModal}
+                  />
                 </Modal>
               </div>
             )}

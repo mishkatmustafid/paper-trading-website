@@ -12,7 +12,7 @@ const CurrentMarket = ({ openModal }) => {
           <tr>
             <th className="bg-gray">stock</th>
             <th className="bg-gray">Market Cap</th>
-            <th className="bg-gray">Price</th>
+            <th className="bg-gray">Price (USD)</th>
             <th className="bg-gray">Purchase</th>
           </tr>
         </thead>
@@ -26,7 +26,7 @@ const CurrentMarket = ({ openModal }) => {
                 <ButtonClick
                   className="btn btn-success"
                   title="buy"
-                  onClick={() => openModal(item.code, item.priceNetVariation)}
+                  onClick={() => openModal(item.code)}
                 />
               </td>
             </tr>

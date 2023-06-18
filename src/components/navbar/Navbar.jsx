@@ -6,8 +6,8 @@ import "./Navbar.css";
 const Navbar = () => {
   return (
     <nav
-      style={{ background: "linear-gradient(to bottom, #4345cf, #0e235c)" }}
-      className="container-fluid navbar navbar-expand-lg px-2"
+
+      className="container-fluid navbar px-3 navbar-expand-lg bg-light fixed-top shadow px-2"
     >
       <Link to={"/dashboard"}>
         <img
@@ -16,7 +16,7 @@ const Navbar = () => {
           className="mx-2"
           style={{ height: "50px" }}
         />
-        <a className="navbar-brand fs-6 text-light" href="#home">
+        <a className="navbar-brand fs-6" href="#home">
           Paper Trading
         </a>
       </Link>
@@ -34,27 +34,27 @@ const Navbar = () => {
       <div className="collapse navbar-collapse" id="navbarNav">
         <ul className="navbar-nav">
           <li className="nav-item">
-            <Link to={"/dashboard"} className="nav-link fs-6 text-light">
+            <Link to={"/dashboard"} className="nav-link fs-6">
               Dashboard
             </Link>
           </li>
           <li className="nav-item">
-            <Link to={"/marketoverview"} className="nav-link fs-6 text-light">
+            <Link to={"/marketoverview"} className="nav-link fs-6">
               Market Overview
             </Link>
           </li>
           <li className="nav-item">
-            <Link to={"/leaderboard"} className="nav-link fs-6 text-light">
-              Leader Board
+            <Link to={"/leaderboard"} className="nav-link fs-6">
+              Leaderboard
             </Link>
           </li>
           <li className="nav-item">
-            <Link to={"/portfolio"} className="nav-link fs-6 text-light">Portfolio</Link>
+            <Link to={"/portfolio"} className="nav-link fs-6">Portfolio</Link>
           </li>
         </ul>
       </div>
       <ul className="navbar-nav ml-auto">
-        <li className="nav-item text-light">Emmanuel Tweneboah</li>
+        <li className="nav-item">Emmanuel Tweneboah</li>
       </ul>
     </nav>
   );

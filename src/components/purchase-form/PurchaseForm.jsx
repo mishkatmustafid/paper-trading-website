@@ -1,18 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const PurchaseForm = ({ stock, closeModal }) => {
+const PurchaseForm = ({ stock, price, closeModal }) => {
   const [quantity, setQuantity] = useState("");
-  const [price, setPrice] = useState("");
   const [total, setTotal] = useState("");
+console.log("price", price)
+  useEffect(() => {
+    calculateTotal(quantity, price);
+  }, [quantity, price]);
 
   const handleQuantityChange = (e) => {
     setQuantity(e.target.value);
-    calculateTotal(e.target.value, price);
-  };
-
-  const handlePriceChange = (e) => {
-    setPrice(e.target.value);
-    calculateTotal(quantity, e.target.value);
   };
 
   const calculateTotal = (quantity, price) => {
@@ -28,8 +25,8 @@ const PurchaseForm = ({ stock, closeModal }) => {
   };
 
   return (
-    <div style={{width: "500px"}} className="container p-3 mt-5 bg-light rounded border d-flex justify-content-center align-items-center">
-      <h4 className="mx-4">Buy <em className="text-secondary">{stock} </em> stock</h4>
+    <div style={{ width: "500px", marginTop: "90px" }} className="container p-3 shadow-lg bg-light rounded border d-flex justify-content-center align-items-center">
+      <h4 className="mx-4">Buy <em className="text-secondary">{stock}</em> stock in <small>$</small></h4> 
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label className="p-1" htmlFor="stockInput">Stock:</label>
@@ -57,10 +54,9 @@ const PurchaseForm = ({ stock, closeModal }) => {
           <input
             id="priceInput"
             type="number"
-            value={price}
-            onChange={handlePriceChange}
+            value={price} 
             className="form-control"
-            required
+            readOnly
           />
         </div>
         <div className="form-group">
