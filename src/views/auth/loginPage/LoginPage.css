@@ -1,3 +1,10 @@
-.custom-background{
-    background: var(--custom-background-color);
+.image{
+    background-image: url("../../../assets/auth.svg");
+    height: 100vh;
+  background-size: contain;
 }
+
+.custom-input::placeholder,
+.custom-input{
+    font-size: 14px; 
+  }

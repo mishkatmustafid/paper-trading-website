@@ -1,14 +1,16 @@
 import React from "react";
 import ButtonClick from "../buttonClick/ButtonClick";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 const Navbar = () => {
+  let navigate = useNavigate();
+  const handleLogout = () => {
+    navigate("/");
+  };
   return (
-    <nav
-
-      className="container-fluid navbar px-3 navbar-expand-lg bg-light fixed-top shadow px-2"
-    >
+    <nav className="container-fluid navbar px-3 navbar-expand-lg bg-light fixed-top shadow px-2">
       <Link to={"/dashboard"}>
         <img
           src={require("../../assets/trade_logo.png")}
@@ -16,7 +18,7 @@ const Navbar = () => {
           className="mx-2"
           style={{ height: "50px" }}
         />
-        <a className="navbar-brand fs-6" href="#home">
+        <a className="navbar-brand fs-6 text-decoration-none">
           Paper Trading
         </a>
       </Link>
@@ -49,12 +51,19 @@ const Navbar = () => {
             </Link>
           </li>
           <li className="nav-item">
-            <Link to={"/portfolio"} className="nav-link fs-6">Portfolio</Link>
+            <Link to={"/portfolio"} className="nav-link fs-6">
+              Portfolio
+            </Link>
           </li>
         </ul>
       </div>
       <ul className="navbar-nav ml-auto">
-        <li className="nav-item">Emmanuel Tweneboah</li>
+        <li className="nav-item px-3">Emmanuel Tweneboah</li>
+        <FontAwesomeIcon
+          onClick={handleLogout}
+          icon={faSignOutAlt}
+          style={{ color: "#e39246", height: "25px", width: "25px" }}
+        />
       </ul>
     </nav>
   );

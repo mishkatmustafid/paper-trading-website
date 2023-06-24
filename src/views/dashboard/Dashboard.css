@@ -1,3 +1,7 @@
 .custom-background{
     background: var(--custom-background-color);
 }
+
+.no-srollbar{
+    overflow: hidden;
+}
