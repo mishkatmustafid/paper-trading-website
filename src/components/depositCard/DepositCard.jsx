@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./DepositCard.css";
 const DepositCard = () => {
   const [amount, setAmount] = useState("");
-  const [balance, setBalance] = useState(0);
+  const [balance, setBalance] = useState(987);
 
   const handleClick = () => {
     setBalance(parseFloat(amount) + parseFloat(balance));
