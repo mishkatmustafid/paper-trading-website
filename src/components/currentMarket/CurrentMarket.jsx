@@ -25,7 +25,7 @@ const CurrentMarket = ({ openModal }) => {
               <td>
                 <ButtonClick
                   className="btn btn-success"
-                  title="buy"
+                  title="buy / sell"
                   onClick={() => openModal(item.code)}
                 />
               </td>

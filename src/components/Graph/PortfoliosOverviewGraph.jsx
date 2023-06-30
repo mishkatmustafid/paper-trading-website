@@ -21,7 +21,7 @@ const PortfoliosOverviewGraph = ({portfolios}) => {
     <div className="container-fluid">
       <h2 className="text-center fs-5">Portfolio Overview</h2>
       <div className="mt-4">
-        <BarChart width={750} height={400} data={data}>
+        <BarChart width={600} height={400} data={data}>
           <CartesianGrid strokeDasharray="4 4" />
           <XAxis dataKey="name" />
           <YAxis />

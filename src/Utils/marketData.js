@@ -154,6 +154,11 @@
       priceNetVariation: '+0.5',
     },
     {
+      code: 'apple',
+      marketCap: 700,
+      priceNetVariation: '+8.5',
+    },
+    {
         code: 'amazon',
         marketCap: 52500,
         priceNetVariation: '+2.5',

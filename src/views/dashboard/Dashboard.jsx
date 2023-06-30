@@ -8,11 +8,19 @@ import CurrentMarket from "../../components/currentMarket/CurrentMarket";
 import { CurrentMarketData } from "../../Utils/marketData";
 import Modal from "react-modal";
 import PurchaseForm from "../../components/purchase-form/PurchaseForm";
+import DepositCard from "../../components/depositCard/DepositCard";
+import TransactionHistory from "../../components/transaction-history/TransactionHistory";
+import PortfolioCard from "../../components/portfolioCard/PortfolioCard";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [selectedStock, setSelectedStock] = useState("google");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStockPrice, setSelectedStockPrice] = useState(0);
+  const navigate = useNavigate()
+const handleClick =() =>{
+navigate("/portfolio")
+};
 
   const openModal = (stock) => {
     console.log(stock);
@@ -97,7 +105,9 @@ const Dashboard = () => {
       ],
     },
   ];
-  const totalAmount = 70000;
+  const totalAmount = 7000;
+  const numberOfTrades = 245;
+
   return (
     <div className="positon-fixed  no-srollbar">
       <Navbar />
@@ -105,23 +115,31 @@ const Dashboard = () => {
         <div className="row">
           <div
             style={{ paddingTop: "90px" }}
-            className="col-md-2 bg-light position-static vh-100 "
+            className="col-md-2 bg-light  vh-100 "
           >
-            <div className="d-flex flex-column  justify-content-center align-items-center  position-fixed">
-              <div className="align-self-start">
-                <button className="btn">Portfolios</button>
-              </div>
-              <div className="d-flex flex-column justify-content-end mt-auto">
-                <button className="btn btn-muted btn-md" type="button">
+            <div className="container1 position-fixed">
+
+             <div class="top"></div>
+
+              <ol
+                style={{ width: "300px" }}
+                className="buttom   list-unstyled p-3 "
+              >
+                <li
+                  // onClick={() => handleListClick(item.stockName)}
+                  className="mb-2 p-3 border down rounded"
+                  style={{ width: "250px" }}
+                >
                   Settings
-                </button>
-                <button className="btn btn-primary btn-md" type="button">
-                  Log Out
-                </button>
-                <button className="btn btn-success btn-md" type="button">
+                </li>
+                <li
+                  // onClick={() => handleListClick(item.stockName)}
+                  className="mb-2 p-3 border rounded down"
+                  style={{ width: "250px" }}
+                >
                   Help
-                </button>
-              </div>
+                </li>
+              </ol>
             </div>
           </div>
           <div
@@ -131,7 +149,7 @@ const Dashboard = () => {
               overflowY: "scroll",
               height: "100vh",
             }}
-            className=" col-md-10  vh-100 p-3 "
+            className=" col-md-10  vh-100 p-5 "
           >
             <div className="scrollable-content">
               <div className="row border mb-4">
@@ -142,23 +160,28 @@ const Dashboard = () => {
                   <div className="row  justify-content-center mb-5 align-items-center">
                     <div className="card">
                       <div className="card-body d-flex flex-row justify-content-between">
-                        <FontAwesomeIcon icon={faWallet} className="fa-5x" />
+                        <FontAwesomeIcon icon={faWallet} className="fa-3x" />
                         <div>
-                          <h3 className="card-title">${totalAmount}</h3>
-                          <p className="card-text">Total Amount Traded</p>
+                          <h3 className="card-title fs-6 fw-bold">
+                            ${totalAmount}
+                          </h3>
+                          <p className="card-text">Amount Traded</p>
                         </div>
                       </div>
                     </div>
                   </div>
+                  <DepositCard />
                   <div className="row justify-content-center align-items-center">
                     <div className="card">
                       <div className="card-body d-flex flex-row justify-content-between">
                         <FontAwesomeIcon
                           icon={faCalculator}
-                          className="fa-5x"
+                          className="fa-3x"
                         />
                         <div>
-                          <h3 className="card-title">${totalAmount}</h3>
+                          <h3 className="card-title fs-6 fw-bold">
+                            {numberOfTrades}
+                          </h3>
                           <p className="card-text">Number of Trades</p>
                         </div>
                       </div>
@@ -179,14 +202,17 @@ const Dashboard = () => {
                       >
                         <PurchaseForm
                           stock={selectedStock}
-                          price={parseFloat(selectedStockPrice.substring(1))}
+                          currentPrice={parseFloat(
+                            selectedStockPrice.substring(1)
+                          )}
                           closeModal={closeModal}
+                          buttonTitle={"buy/sell"}
                         />
                       </Modal>
                     </div>
                   )}
                 </div>
-                <div className="col-md-4">
+                <div onClick={() => navigate("/transactions")} className="col-md-4">
                   <h2 className="text-center fs-5">Pending Orders</h2>
                   <table className="table border">
                     <thead className="thead-light">
@@ -206,6 +232,18 @@ const Dashboard = () => {
                       ))}
                     </tbody>
                   </table>
+                </div>
+              </div>
+              <div className="row border mb-4">
+                <div className="col-md-8">
+                  <h2 className="text-center fs-5">Transaction History</h2>
+                  <TransactionHistory marketData={CurrentMarketData} />
+                </div>
+                <div className="col-md-4">
+                  <h2 className="text-center fs-5">Portfolios</h2>
+                  <PortfolioCard handleClick={handleClick} name="Portfolio 1" amountTraded={890} />
+                  <PortfolioCard handleClick={handleClick} name="Portfolio 2" amountTraded={8950} />
+                  <PortfolioCard handleClick={handleClick} name="Portfolio 3" amountTraded={490} />
                 </div>
               </div>
             </div>

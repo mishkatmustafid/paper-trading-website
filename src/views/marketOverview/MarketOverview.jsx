@@ -88,8 +88,11 @@ const MarketOverview = () => {
                 >
                   <PurchaseForm
                     stock={selectedStock}
-                    price={parseFloat(selectedStockPrice.substring(1))}
+                    currentPrice={parseFloat(
+                      selectedStockPrice.substring(1)
+                    )}
                     closeModal={closeModal}
+                    buttonTitle={"buy/sell"}
                   />
                 </Modal>
               </div>

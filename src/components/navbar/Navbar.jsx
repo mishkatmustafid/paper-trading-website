@@ -1,5 +1,4 @@
 import React from "react";
-import ButtonClick from "../buttonClick/ButtonClick";
 import { Link, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -43,6 +42,11 @@ const Navbar = () => {
           <li className="nav-item">
             <Link to={"/marketoverview"} className="nav-link fs-6">
               Market Overview
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link to={"/transactions"} className="nav-link fs-6">
+              Transactions
             </Link>
           </li>
           <li className="nav-item">

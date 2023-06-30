@@ -7,6 +7,7 @@ import LoginPage from "./views/auth/loginPage/LoginPage";
 import StockPage from "./views/portfolioPage/PortfolioPage";
 import MarketOverview from "./views/marketOverview/MarketOverview";
 import LeaderBoard from "./views/leaderboardPage/LeaderBoard";
+import Orders from "./views/Orders/Orders";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/portfolio" element={<StockPage />} />
           <Route path="/marketoverview" element={<MarketOverview />} />
           <Route path="/leaderboard" element={<LeaderBoard />} />
+          <Route path="/transactions" element={<Orders />} />
         </Routes>
       </BrowserRouter>
     </div>
