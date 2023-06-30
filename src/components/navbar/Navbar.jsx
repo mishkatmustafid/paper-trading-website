@@ -17,9 +17,9 @@ const Navbar = () => {
           className="mx-2"
           style={{ height: "50px" }}
         />
-        <a className="navbar-brand fs-6 text-decoration-none">
+        <span className="navbar-brand fs-6 text-decoration-none ">
           Paper Trading
-        </a>
+        </span>
       </Link>
       <button
         className="navbar-toggler"
