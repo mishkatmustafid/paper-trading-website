@@ -62,7 +62,7 @@ const Navbar = () => {
         </ul>
       </div>
       <ul className="navbar-nav ml-auto">
-        <li className="nav-item px-3">Emmanuel Tweneboah</li>
+        <li className='nav-item px-3'>Sohan Sarwar</li>
         <FontAwesomeIcon
           onClick={handleLogout}
           icon={faSignOutAlt}
