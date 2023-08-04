@@ -1,13 +1,13 @@
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import LandingPage from "./views/landingPage/LandingPage";
-import Dashboard from "./views/dashboard/Dashboard";
-import SignupPage from "./views/auth/signupPage/SignupPage";
-import LoginPage from "./views/auth/loginPage/LoginPage";
-import StockPage from "./views/portfolioPage/PortfolioPage";
-import MarketOverview from "./views/marketOverview/MarketOverview";
-import LeaderBoard from "./views/leaderboardPage/LeaderBoard";
-import Orders from "./views/Orders/Orders";
+import LandingPage from "./views/landingPage";
+import Dashboard from "./views/dashboard";
+import SignupPage from "./views/auth/signupPage";
+import LoginPage from "./views/auth/loginPage";
+import StockPage from "./views/portfolioPage";
+import MarketOverview from "./views/marketOverview";
+import LeaderBoard from "./views/leaderboardPage";
+import Orders from "./views/Orders";
 
 function App() {
   return (

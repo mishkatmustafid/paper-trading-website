@@ -10,12 +10,9 @@ const DepositCard = () => {
   };
 
   return (
-    <div className="row  justify-content-center mb-5 align-items-center">
+    <div className="row justify-content-center mb-5 align-items-center">
       <div className="card">
         <div className="card-body d-flex flex-row ">
-          <div className="p-3 align-items-center ">
-            <h5>Deposit Fund</h5>
-          </div>
           <div>
             <input
               style={{ width: "150px", height: "50px" }}

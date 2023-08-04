@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./PurchaseForm.css";
+import SpinnerLoader from "../spinner";
 const PurchaseForm = ({ stock, currentPrice, closeModal, buttonTitle }) => {
   const [quantity, setQuantity] = useState("");
   const [total, setTotal] = useState("");
@@ -7,6 +8,7 @@ const PurchaseForm = ({ stock, currentPrice, closeModal, buttonTitle }) => {
   const [orderType, setOrdertype] = useState("");
   const [portfolio, setPortfolio] = useState("");
   const [side, setSide] = useState("");
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     calculateTotal(quantity, price);
@@ -21,7 +23,9 @@ const PurchaseForm = ({ stock, currentPrice, closeModal, buttonTitle }) => {
     setTotal(total);
   };
 
+
   const handleSubmit = (e) => {
+    setLoading(true)
     e.preventDefault();
     // Perform purchase logic here
     console.log("Purchase submitted:", {
@@ -32,7 +36,8 @@ const PurchaseForm = ({ stock, currentPrice, closeModal, buttonTitle }) => {
       orderType,
       portfolio,
     });
-    closeModal();
+  
+    //closeModal();
   };
 
   return (
@@ -145,13 +150,15 @@ const PurchaseForm = ({ stock, currentPrice, closeModal, buttonTitle }) => {
             <option value="marketOrder">LIMIT ORDER</option>
           </select>
         </div>
+      
         <div className="d-flex justify-content-between">
           <button
             style={{ width: "100px" }}
             type="submit"
             className="btn btn-primary btn-sm m-1"
           >
-            {buttonTitle}
+      
+         { loading ? <SpinnerLoader /> : buttonTitle}
           </button>
           <button
             type="button"

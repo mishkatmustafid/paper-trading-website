@@ -1,6 +1,6 @@
 import React from 'react';
-import Navbar from '../../components/navbar/Navbar';
-import PageHeading from '../../components/page-heading/PageHeading';
+import Navbar from '../../components/navbar';
+import PageHeading from '../../components/page-heading';
 
 
 const orders = [

@@ -1,6 +1,5 @@
 import React from "react";
 import { CurrentMarketData } from "../../Utils/marketData";
-import ButtonClick from "../buttonClick/ButtonClick";
 
 
 const CurrentMarket = ({ openModal }) => {
@@ -23,11 +22,11 @@ const CurrentMarket = ({ openModal }) => {
               <td>{item.marketCap}</td>
               <td>{item.priceNetVariation}</td>
               <td>
-                <ButtonClick
+                <button
                   className="btn btn-success"
-                  title="buy / sell"
+           
                   onClick={() => openModal(item.code)}
-                />
+                >buy / sell</button>
               </td>
             </tr>
           ))}

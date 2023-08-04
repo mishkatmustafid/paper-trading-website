@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import StockCircle from "../../components/stockCircle/StockCircle";
+import StockCircle from "../../components/stockCircle";
 import "./MarketOverview.css";
 import {
   faGoogle,
@@ -9,14 +9,14 @@ import {
   faFacebook,
   faMicrosoft,
 } from "@fortawesome/free-brands-svg-icons";
-import MarketOrders from "../../components/marketOrders/MarketOrders";
+import MarketOrders from "../../components/marketOrders";
 import SingleStock from "../../components/Graph/SingleStock";
-import CurrentMarket from "../../components/currentMarket/CurrentMarket";
+import CurrentMarket from "../../components/currentMarket";
 import Modal from "react-modal";
-import PurchaseForm from "../../components/purchase-form/PurchaseForm";
+import PurchaseForm from "../../components/purchase-form";
 import { CurrentMarketData, stockData } from "../../Utils/marketData";
-import Navbar from "../../components/navbar/Navbar";
-import PageHeading from "../../components/page-heading/PageHeading";
+import Navbar from "../../components/navbar";
+import PageHeading from "../../components/page-heading";
 
 const MarketOverview = () => {
   const [selectedStock, setSelectedStock] = useState("google");

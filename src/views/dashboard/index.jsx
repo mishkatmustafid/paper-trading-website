@@ -2,28 +2,27 @@ import React, { useState } from "react";
 import "./Dashboard.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalculator, faWallet } from "@fortawesome/free-solid-svg-icons";
-import Navbar from "../../components/navbar/Navbar";
+import Navbar from "../../components/navbar";
 import PortfoliosOverviewGraph from "../../components/Graph/PortfoliosOverviewGraph";
-import CurrentMarket from "../../components/currentMarket/CurrentMarket";
+import CurrentMarket from "../../components/currentMarket";
 import { CurrentMarketData } from "../../Utils/marketData";
 import Modal from "react-modal";
-import PurchaseForm from "../../components/purchase-form/PurchaseForm";
-import DepositCard from "../../components/depositCard/DepositCard";
-import TransactionHistory from "../../components/transaction-history/TransactionHistory";
-import PortfolioCard from "../../components/portfolioCard/PortfolioCard";
+import PurchaseForm from "../../components/purchase-form";
+import DepositCard from "../../components/depositCard";
+import TransactionHistory from "../../components/transaction-history";
+import PortfolioCard from "../../components/portfolioCard";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [selectedStock, setSelectedStock] = useState("google");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStockPrice, setSelectedStockPrice] = useState(0);
-  const navigate = useNavigate()
-const handleClick =() =>{
-navigate("/portfolio")
-};
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate("/portfolio");
+  };
 
   const openModal = (stock) => {
-    console.log(stock);
     const foundStock = CurrentMarketData.find((item) => item.code === stock);
     console.log("found", foundStock);
     if (foundStock) {
@@ -118,24 +117,23 @@ navigate("/portfolio")
             className="col-md-2 bg-light  vh-100 "
           >
             <div className="container1 position-fixed">
-
-             <div class="top"></div>
+              <div class="top"></div>
 
               <ol
                 style={{ width: "300px" }}
-                className="buttom   list-unstyled p-3 "
+                className="buttom list-unstyled p-3 "
               >
                 <li
                   // onClick={() => handleListClick(item.stockName)}
                   className="mb-2 p-3 border down rounded"
-                  style={{ width: "250px" }}
+                  style={{ width: "225px" }}
                 >
                   Settings
                 </li>
                 <li
                   // onClick={() => handleListClick(item.stockName)}
                   className="mb-2 p-3 border rounded down"
-                  style={{ width: "250px" }}
+                  style={{ width: "225px" }}
                 >
                   Help
                 </li>
@@ -212,9 +210,12 @@ navigate("/portfolio")
                     </div>
                   )}
                 </div>
-                <div onClick={() => navigate("/transactions")} className="col-md-4">
+                <div
+                  onClick={() => navigate("/transactions")}
+                  className="col-md-4"
+                >
                   <h2 className="text-center fs-5">Pending Orders</h2>
-                  <table className="table border">
+                  <table className="table table-striped border">
                     <thead className="thead-light">
                       <tr>
                         <th className="bg-gray">stock</th>
@@ -241,9 +242,21 @@ navigate("/portfolio")
                 </div>
                 <div className="col-md-4">
                   <h2 className="text-center fs-5">Portfolios</h2>
-                  <PortfolioCard handleClick={handleClick} name="Portfolio 1" amountTraded={890} />
-                  <PortfolioCard handleClick={handleClick} name="Portfolio 2" amountTraded={8950} />
-                  <PortfolioCard handleClick={handleClick} name="Portfolio 3" amountTraded={490} />
+                  <PortfolioCard
+                    handleClick={handleClick}
+                    name="Portfolio 1"
+                    amountTraded={890}
+                  />
+                  <PortfolioCard
+                    handleClick={handleClick}
+                    name="Portfolio 2"
+                    amountTraded={8950}
+                  />
+                  <PortfolioCard
+                    handleClick={handleClick}
+                    name="Portfolio 3"
+                    amountTraded={490}
+                  />
                 </div>
               </div>
             </div>

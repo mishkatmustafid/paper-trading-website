@@ -1,9 +1,16 @@
-import React from "react";
-import ButtonClick from "../../../components/buttonClick/ButtonClick";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./SignupPage.css";
+import SpinnerLoader from "../../../components/spinner";
 
 const SignupPage = () => {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = (e) =>{
+    e.preventDefault();
+    setLoading(true)
+
+  }
   return (
     <div className="row bg-white container-fluid">
       <div className="col-md-6 image mx-auto"></div>
@@ -11,12 +18,13 @@ const SignupPage = () => {
         <div className=" vh-100 d-flex align-items-center justify-content-center bg-white">
           <div>
             <h2 className="mb-5 text-center text-dark ">RegIster</h2>
-            <form>
+            <form onSubmit={handleSubmit}>
               <div className="form-group mb-2">
                 <label className="my-1 fs-5  text-dark font-weight-bold">
                   Email:
                 </label>
                 <input
+                    style={{height: "50px"}}
                   type="email"
                   className="form-control form-control-lg custom-input"
                   placeholder="enter your email"
@@ -27,6 +35,7 @@ const SignupPage = () => {
                   Username:
                 </label>
                 <input
+                    style={{height: "50px"}}
                   type="text"
                   className="form-control form-control-lg custom-input"
                   placeholder="enter your username"
@@ -39,6 +48,7 @@ const SignupPage = () => {
                   </label>
                   <input
                     type="password"
+                    style={{height: "50px"}}
                     className="form-control form-control-lg custom-input"
                     placeholder="enter your password"
                   />
@@ -48,6 +58,7 @@ const SignupPage = () => {
                     Confirm Password:
                   </label>
                   <input
+                      style={{height: "50px"}}
                     type="password"
                     className="form-control form-control-lg custom-input"
                     placeholder="confirm password"
@@ -56,11 +67,11 @@ const SignupPage = () => {
               </div>
 
               <div className="d-grid">
-                <ButtonClick
-                  title="Register"
+                <button
+                    style={{height: "50px"}}
                   type="submit"
                   className="btn btn-success btn-lg btn-block"
-                />
+                >{loading ? <SpinnerLoader /> : "Register"}</button>
               </div>
             </form>
             <p className="mt-4 text-dark text-monospace text-center ">

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import "./PortfolioPage.css";
-import MyPieChart from "../../components/piechart/MyPieChart";
-import PageHeading from "../../components/page-heading/PageHeading";
-import Navbar from "../../components/navbar/Navbar";
-import PurchaseForm from "../../components/purchase-form/PurchaseForm";
+import MyPieChart from "../../components/piechart";
+import PageHeading from "../../components/page-heading";
+import Navbar from "../../components/navbar";
+import PurchaseForm from "../../components/purchase-form";
 import { CurrentMarketData } from "../../Utils/marketData";
 import Modal from "react-modal";
 
