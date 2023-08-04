@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import "./StockCircle.css";
+import "./index.css";
 
 const StockCircle = ({ stockName, icon }) => {
   return (

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import StockCircle from "../../components/stockCircle";
-import "./MarketOverview.css";
+import "./index.css";
 import {
   faGoogle,
   faBitcoin,

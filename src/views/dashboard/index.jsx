@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Dashboard.css";
+import "./index.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalculator, faWallet } from "@fortawesome/free-solid-svg-icons";
 import Navbar from "../../components/navbar";

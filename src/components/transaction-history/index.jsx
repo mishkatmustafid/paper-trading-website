@@ -1,8 +1,6 @@
 import React from "react";
 
 const TransactionHistory = ({ marketData}) => {
- 
-
   return (
     <div className="contaner">
       <table className="table text-dark border fs-6 text">

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./PortfolioPage.css";
+import "./index.css";
 import MyPieChart from "../../components/piechart";
 import PageHeading from "../../components/page-heading";
 import Navbar from "../../components/navbar";

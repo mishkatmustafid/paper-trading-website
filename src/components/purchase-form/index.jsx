@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./PurchaseForm.css";
+import "./index.css";
 import SpinnerLoader from "../spinner";
 const PurchaseForm = ({ stock, currentPrice, closeModal, buttonTitle }) => {
   const [quantity, setQuantity] = useState("");

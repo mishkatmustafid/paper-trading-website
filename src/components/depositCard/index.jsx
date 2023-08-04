@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./DepositCard.css";
+import "./index.css";
 const DepositCard = () => {
   const [amount, setAmount] = useState("");
   const [balance, setBalance] = useState(987);
