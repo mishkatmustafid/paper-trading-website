@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import "./SignupPage.css";
+import "./index.css";
 import SpinnerLoader from "../../../components/spinner";
 
 const SignupPage = () => {
