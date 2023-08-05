@@ -28,10 +28,7 @@ const Dashboard = () => {
     navigate("/portfolio");
   };
 
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate("/");
-  };
+
 
   const openModal = (stock) => {
     const foundStock = CurrentMarketData.find((item) => item.code === stock);
@@ -122,7 +119,6 @@ const Dashboard = () => {
     <div className="positon-fixed  no-srollbar">
       <Navbar
         full_name={full_name && full_name.toUpperCase()}
-        handleLogout={handleLogout}
       />
       <div className="container-fluid vh-100 bg-white">
         <div className="row">

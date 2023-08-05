@@ -15,13 +15,19 @@ const LoginPage = () => {
   const error = useSelector((state) => state.auth.error);
 
   const dispatch = useDispatch();
-  const callback = () => {
-    navigate("/dashboard");
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(loginUser({ email, password, callback }));
+    dispatch(
+      loginUser({
+        email,
+        password,
+        successCallback: () => {
+          console.log("here");
+          navigate("/dashboard");
+        }
+      })
+    );
   };
   return (
     <div className="vw-100 row bg-white container-fluid">

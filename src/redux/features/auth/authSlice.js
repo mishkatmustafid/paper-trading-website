@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { BASE_URL } from "../../../Utils/endopoints";
+import { endopoints } from "../../endopoints";
 
 const initialState = {
   isAuthenticated: false,
@@ -18,7 +18,7 @@ export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async ({ email, password, successCallback }, thunkAPI) => {
     try {
-      const response = await axios.post(`${BASE_URL}/users/signin`, {
+      const response = await axios.post(endopoints.signin, {
         email,
         password,
       });
@@ -26,11 +26,11 @@ export const loginUser = createAsyncThunk(
       const { status, details } = response.data;
 
       localStorage.setItem("token", details.access_token);
-      localStorage.setItem("full_name", details.full_name);
+     // localStorage.setItem("full_name", details.full_name);
       if (successCallback && typeof successCallback === "function") {
         successCallback();
       }
-      thunkAPI.dispatch(updateFullName(details.full_name));
+   //   thunkAPI.dispatch(updateFullName(details.full_name));
       thunkAPI.dispatch(updateToken(details.access_token));
       return { status, details };
     } catch (error) {
@@ -43,7 +43,7 @@ export const signupUser = createAsyncThunk(
   "auth/signupUser",
   async ({ full_name, email, password, successCallback }, thunkAPI) => {
     try {
-      const response = await axios.post(`${BASE_URL}/users/signup`, {
+      const response = await axios.post(endopoints.signup, {
         full_name,
         email,
         password,
@@ -89,7 +89,7 @@ const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(loginUser.fulfilled, (state, action) => {
+      .addCase(loginUser.fulfilled, (state,action) => {
         state.loading = false;
         state.isAuthenticated = true;
       })

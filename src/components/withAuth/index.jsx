@@ -7,6 +7,7 @@ const WithAuth = (WrappedComponent) => {
   const WrapperComponent = (props) => {
     const token = useSelector((state) => state.auth.token);
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    console.log(isAuthenticated)
     const navigate = useNavigate();
 
     const isTokenExpired = (token) => {
@@ -20,11 +21,10 @@ const WithAuth = (WrappedComponent) => {
     };
 
     useEffect(() => {
-      if (isAuthenticated === false || isTokenExpired(token)) {
-        console.log("we this");
+      if (isAuthenticated === false && isTokenExpired(token)) {
         navigate("/login");
       }
-    }, [isAuthenticated,navigate,token]);
+    }, []);
 
     return <WrappedComponent {...props} />;
   };

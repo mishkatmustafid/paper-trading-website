@@ -1,9 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./index.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
-const Navbar = ({full_name, handleLogout}) => {
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/features/auth/authSlice";
+const Navbar = ({full_name}) => {
+
+  const dispatch = useDispatch();
+  const navigate =useNavigate();
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/");
+  };
 
   return (
     <nav className="container-fluid navbar px-3 navbar-expand-lg bg-light fixed-top shadow px-2">
