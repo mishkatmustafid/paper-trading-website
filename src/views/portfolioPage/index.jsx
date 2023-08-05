@@ -40,7 +40,7 @@ const PortfolioPage = () => {
   ];
   return (
     <div className="container-fluid">
-      <Navbar />
+      <Navbar  />
       <PageHeading title="Portfolio Overview" />
       <div className="container-fluid">
         <div className="p-3 align-items-center ">

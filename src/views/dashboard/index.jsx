@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./index.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalculator, faWallet } from "@fortawesome/free-solid-svg-icons";
@@ -13,8 +13,9 @@ import TransactionHistory from "../../components/transaction-history";
 import PortfolioCard from "../../components/portfolioCard";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../redux/features/auth/authSlice";
 import WithAuth from "../../components/withAuth";
+import { fetchUser } from "../../redux/features/user/userSlice";
+import { decodedToken } from "../../interceptors/jwtDecoder";
 
 const Dashboard = () => {
   const [selectedStock, setSelectedStock] = useState("google");
@@ -22,12 +23,18 @@ const Dashboard = () => {
   const [selectedStockPrice, setSelectedStockPrice] = useState(0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const full_name = useSelector((state) => state.auth.full_name);
+ // const token = useSelector((state) => state.auth.token); Decode the user id from the token instead
+  const user_id = useSelector((state) => state.auth.user_id);
+  const user = useSelector((state) => state.user.user);
 
+  //console.log(decodedToken(token))
   const handleClick = () => {
     navigate("/portfolio");
   };
 
+  useEffect(() => {
+    dispatch(fetchUser(user_id));
+  }, [])
 
 
   const openModal = (stock) => {
@@ -118,7 +125,7 @@ const Dashboard = () => {
   return (
     <div className="positon-fixed  no-srollbar">
       <Navbar
-        full_name={full_name && full_name.toUpperCase()}
+        full_name={user && user.full_name.toUpperCase()}
       />
       <div className="container-fluid vh-100 bg-white">
         <div className="row">
