@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from '../../components/navbar';
 import PageHeading from '../../components/page-heading';
+import WithAuth from '../../components/withAuth';
 
 
 const orders = [
@@ -121,4 +122,4 @@ function setColorOfOrderStatus (status){
     default: return "secondary"  
   }
 }
-export default Orders;
+export default WithAuth(Orders);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./index.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalculator, faWallet } from "@fortawesome/free-solid-svg-icons";
@@ -14,6 +14,7 @@ import PortfolioCard from "../../components/portfolioCard";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/features/auth/authSlice";
+import WithAuth from "../../components/withAuth";
 
 const Dashboard = () => {
   const [selectedStock, setSelectedStock] = useState("google");
@@ -280,4 +281,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default WithAuth(Dashboard);

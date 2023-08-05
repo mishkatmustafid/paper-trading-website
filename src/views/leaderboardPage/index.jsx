@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from '../../components/navbar';
 import PageHeading from '../../components/page-heading';
+import WithAuth from '../../components/withAuth';
 
 
 const teamsData = [
@@ -56,4 +57,4 @@ const Leaderboard = () => {
   );
 };
 
-export default Leaderboard;
+export default WithAuth(Leaderboard);

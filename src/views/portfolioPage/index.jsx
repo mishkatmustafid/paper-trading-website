@@ -6,6 +6,7 @@ import Navbar from "../../components/navbar";
 import PurchaseForm from "../../components/purchase-form";
 import { CurrentMarketData } from "../../Utils/marketData";
 import Modal from "react-modal";
+import WithAuth from "../../components/withAuth";
 
 const PortfolioPage = () => {
   const [name, settName] = useState("");
@@ -212,4 +213,4 @@ const PortfolioPage = () => {
   );
 };
 
-export default PortfolioPage;
+export default WithAuth(PortfolioPage);

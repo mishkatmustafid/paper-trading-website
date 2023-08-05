@@ -17,6 +17,7 @@ import PurchaseForm from "../../components/purchase-form";
 import { CurrentMarketData, stockData } from "../../Utils/marketData";
 import Navbar from "../../components/navbar";
 import PageHeading from "../../components/page-heading";
+import WithAuth from "../../components/withAuth";
 
 const MarketOverview = () => {
   const [selectedStock, setSelectedStock] = useState("google");
@@ -128,4 +129,4 @@ const MarketOverview = () => {
   );
 };
 
-export default MarketOverview;
+export default WithAuth(MarketOverview);
