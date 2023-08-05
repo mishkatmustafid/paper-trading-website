@@ -10,7 +10,7 @@ const SignupPage = () => {
   const [full_name, setFullname] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
-  const [passError, setPassError] = useState("")
+  const [passError, setPassError] = useState("");
   const navigate = useNavigate();
 
   const loading = useSelector((state) => state.auth.loading);
@@ -20,10 +20,10 @@ const SignupPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (password !== confirmPass){
-      setPassError("Passwords mismatch")
+    if (password !== confirmPass) {
+      setPassError("Passwords mismatch");
       return;
-    } 
+    }
     dispatch(
       signupUser({
         full_name,
@@ -32,7 +32,7 @@ const SignupPage = () => {
         successCallback: () => {
           console.log("Signup successful! Redirecting...");
           // Redirect or perform any other action upon successful signup
-          navigate("/dashboard");
+          navigate("/login");
         },
       })
     );
@@ -110,8 +110,11 @@ const SignupPage = () => {
             </form>
             <p className="mt-4 text-dark text-monospace text-center ">
               Already a Member ?{"   "}
-              <Link to="/login">
-                <a className="text-success text-decoration-none p-1">Login</a>
+              <Link
+                className="text-success text-decoration-none p-1"
+                to="/login"
+              >
+                Login
               </Link>
             </p>
           </div>

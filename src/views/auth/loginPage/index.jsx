@@ -25,7 +25,7 @@ const LoginPage = () => {
         successCallback: () => {
           console.log("here");
           navigate("/dashboard");
-        }
+        },
       })
     );
   };
@@ -76,8 +76,11 @@ const LoginPage = () => {
             </form>
             <p className="mt-4 text-center text-monospace text-dark">
               New to paper trading?{" "}
-              <Link to="/register">
-                <a className="text-success text-decoration-none ">Register</a>
+              <Link
+                className="text-success text-decoration-none "
+                to="/register"
+              >
+                Register
               </Link>
             </p>
           </div>

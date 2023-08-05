@@ -56,7 +56,7 @@ const PortfolioPage = () => {
     <div className="container-fluid">
       <Navbar />
       <PageHeading title="Portfolio Overview" />
-      <div className="container-fluid">
+      <div className="container">
         <div className="p-3 align-items-center ">
           <h5>Create Portfolio</h5>
         </div>

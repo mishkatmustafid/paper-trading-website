@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import WithAuth from "../../components/withAuth";
 import { fetchUser } from "../../redux/features/user/userSlice";
-import { decodedToken } from "../../interceptors/jwtDecoder";
+//import { decodedToken } from "../../interceptors/jwtDecoder";
 
 const Dashboard = () => {
   const [selectedStock, setSelectedStock] = useState("google");

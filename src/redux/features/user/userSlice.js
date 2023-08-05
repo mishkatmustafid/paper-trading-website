@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { endopoints } from "../../../Utils/endopoints";
 import axiosInstance from "../../../interceptors/axiosInterceptor";
 
@@ -25,7 +25,7 @@ export const fetchUser = createAsyncThunk(
 );
 
 const userSlice = createSlice({
-  name: "auth",
+  name: "userSlice",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

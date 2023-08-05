@@ -3,15 +3,15 @@ import { endopoints } from "../../../Utils/endopoints";
 import axiosInstance from "../../../interceptors/axiosInterceptor";
 
 const initialState = {
-  isAuthenticated: false,
+  isAuthenticated: localStorage.getItem("isAuthenticated"),
   token: localStorage.getItem("token"),
-  full_name: localStorage.getItem("full_name"),
   user_id: localStorage.getItem("userId"),
   loading: false,
   error: null,
 };
 
 export const updateUserId = createAction('auth/updateUserId');
+export const updateUserAuth = createAction('auth/updateAuth');
 export const updateToken = createAction('auth/updateToken');
 
 
@@ -28,11 +28,13 @@ export const loginUser = createAsyncThunk(
 
       localStorage.setItem("token", details.access_token);
       localStorage.setItem("userId", details.user_id);
+      localStorage.setItem("isAuthenticated", true);
       if (successCallback && typeof successCallback === "function") {
         successCallback();
       }
       thunkAPI.dispatch(updateUserId(details.user_id));
       thunkAPI.dispatch(updateToken(details.access_token));
+      thunkAPI.dispatch(updateUserAuth(true));
       return { status, details };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
@@ -51,14 +53,18 @@ export const signupUser = createAsyncThunk(
       });
       
       const { status, details } = response.data;
-
+      console.log('====================================');
+      console.log(details);
+      console.log('====================================');
       localStorage.setItem("token", details.access_token);
       localStorage.setItem("userId", details.user_id);
+      localStorage.setItem("isAuthenticated", true);
       if (successCallback && typeof successCallback === "function") {
         successCallback();
       }
       thunkAPI.dispatch(updateUserId(details.user_id));
       thunkAPI.dispatch(updateToken(details.access_token));
+      thunkAPI.dispatch(updateUserAuth(true));
       return { status, details };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
@@ -78,6 +84,7 @@ const authSlice = createSlice({
       localStorage.removeItem("token");
       localStorage.removeItem("full_name");
       localStorage.removeItem("userId");
+      localStorage.removeItem("isAuthenticated");
     },
     updateFullName: (state, action) => {
         state.full_name = action.payload;
@@ -85,6 +92,12 @@ const authSlice = createSlice({
       updateToken: (state, action) => {
         state.token = action.payload;
       },
+      updateUserAuth: (state, action) =>{
+        state.isAuthenticated = action.payload;
+      },
+      updateUserId: (state, action) =>{
+        state.user_id = action.payload;
+      }
   },
   extraReducers: (builder) => {
     builder
