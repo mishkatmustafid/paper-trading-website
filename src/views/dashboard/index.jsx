@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./index.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalculator, faWallet } from "@fortawesome/free-solid-svg-icons";
@@ -12,14 +12,24 @@ import DepositCard from "../../components/depositCard";
 import TransactionHistory from "../../components/transaction-history";
 import PortfolioCard from "../../components/portfolioCard";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../redux/features/auth/authSlice";
 
 const Dashboard = () => {
   const [selectedStock, setSelectedStock] = useState("google");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStockPrice, setSelectedStockPrice] = useState(0);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const full_name = useSelector((state) => state.auth.full_name);
+
   const handleClick = () => {
     navigate("/portfolio");
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/");
   };
 
   const openModal = (stock) => {
@@ -109,7 +119,10 @@ const Dashboard = () => {
 
   return (
     <div className="positon-fixed  no-srollbar">
-      <Navbar />
+      <Navbar
+        full_name={full_name && full_name.toUpperCase()}
+        handleLogout={handleLogout}
+      />
       <div className="container-fluid vh-100 bg-white">
         <div className="row">
           <div

@@ -1,13 +1,10 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./index.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
-const Navbar = () => {
-  let navigate = useNavigate();
-  const handleLogout = () => {
-    navigate("/");
-  };
+const Navbar = ({full_name, handleLogout}) => {
+
   return (
     <nav className="container-fluid navbar px-3 navbar-expand-lg bg-light fixed-top shadow px-2">
       <Link to={"/dashboard"}>
@@ -62,7 +59,7 @@ const Navbar = () => {
         </ul>
       </div>
       <ul className="navbar-nav ml-auto">
-        <li className='nav-item px-3'>Sohan Sarwar</li>
+        <li className='nav-item px-3'>{full_name}</li>
         <FontAwesomeIcon
           onClick={handleLogout}
           icon={faSignOutAlt}
