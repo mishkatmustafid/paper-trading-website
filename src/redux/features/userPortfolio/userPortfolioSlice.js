@@ -8,54 +8,57 @@ const initialState = {
   focus: null,
   loading: false,
   error: null,
+  message: "",
 };
 
 export const createUserPortfolio = createAsyncThunk(
-    "userPortfolio/createUserPortfolio",
-    async (user_id, thunkAPI) => {
-      try {
-        const response = await axiosInstance.post(endopoints.portfolio(user_id));
-  
-        const { status, details } = response.data;
-        
-  
-        return { status, details };
-      } catch (error) {
-        return thunkAPI.rejectWithValue(error.response.data);
-      }
-    }
-  );
+  "userPortfolio/createUserPortfolio",
+  async ({ user_id, name, successCallback }, thunkAPI) => {
+    try {
+      const response = await axiosInstance.post(endopoints.portfolio(user_id), {
+        name: name,
+      });
 
-  export const deleteUserPortfolio = createAsyncThunk(
-    "userPortfolio/deleteUserPortfolio",
-    async (user_id, thunkAPI) => {
-      try {
-        const response = await axiosInstance.post(endopoints.portfolio(user_id));
-  
-        const { status, details } = response.data;
-        
-        return { status, details };
-      } catch (error) {
-        return thunkAPI.rejectWithValue(error.response.data);
-      }
-    }
-  );
+      const { status, message,  details } = response.data;
 
- export const updateUserPortfolio = createAsyncThunk(
-    "userPortfolio/updateUserPortfolio",
-    async (user_id, thunkAPI) => {
-      try {
-        const response = await axiosInstance.post(endopoints.portfolio(user_id));
-  
-        const { status, details } = response.data;
-        
-  
-        return { status, details };
-      } catch (error) {
-        return thunkAPI.rejectWithValue(error.response.data);
-      }
+      if (successCallback) successCallback();
+
+      return { status,message, details };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
     }
-  );
+  }
+);
+
+export const deleteUserPortfolio = createAsyncThunk(
+  "userPortfolio/deleteUserPortfolio",
+  async (user_id, thunkAPI) => {
+    try {
+      const response = await axiosInstance.post(endopoints.portfolio(user_id));
+
+      const { status, details } = response.data;
+
+      return { status, details };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const updateUserPortfolio = createAsyncThunk(
+  "userPortfolio/updateUserPortfolio",
+  async (user_id, thunkAPI) => {
+    try {
+      const response = await axiosInstance.post(endopoints.portfolio(user_id));
+
+      const { status, details } = response.data;
+
+      return { status, details };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const fetchUserPortfolio = createAsyncThunk(
   "userPortfolio/fetchUserPortfolio",
@@ -64,7 +67,6 @@ export const fetchUserPortfolio = createAsyncThunk(
       const response = await axiosInstance.get(endopoints.portfolio(user_id));
 
       const { status, details } = response.data;
-      
 
       return { status, details };
     } catch (error) {
@@ -74,23 +76,19 @@ export const fetchUserPortfolio = createAsyncThunk(
 );
 
 export const fetchAllUserPortfolio = createAsyncThunk(
-    "userPortfolio/fetchAllUserPortfolio",
-    async (user_id, thunkAPI) => {
-      try {
-        const response = await axiosInstance.get(endopoints.portfolio(user_id));
-  
-        const { status, details } = response.data;
-        
-  
-        return { status, details };
-      } catch (error) {
-        return thunkAPI.rejectWithValue(error.response.data);
-      }
+  "userPortfolio/fetchAllUserPortfolio",
+  async (user_id, thunkAPI) => {
+    try {
+      const response = await axiosInstance.get(endopoints.portfolio(user_id));
+
+      const { status, details } = response.data;
+
+      return { status, details };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
     }
-  );
-
-
-
+  }
+);
 
 const userPortfoliio = createSlice({
   name: "userPortfolio",
@@ -120,6 +118,19 @@ const userPortfoliio = createSlice({
         state.focus = action.payload.details;
       })
       .addCase(fetchAllUserPortfolio.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      .addCase(createUserPortfolio.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createUserPortfolio.fulfilled, (state, action) => {
+        state.loading = false;
+        state.message = action.payload.message;
+      })
+      .addCase(createUserPortfolio.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

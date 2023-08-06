@@ -7,25 +7,30 @@ import PurchaseForm from "../../components/purchase-form";
 import { CurrentMarketData } from "../../Utils/marketData";
 import Modal from "react-modal";
 import WithAuth from "../../components/withAuth";
+import { createUserPortfolio } from "../../redux/features/userPortfolio/userPortfolioSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const PortfolioPage = () => {
   const [name, setName] = useState("");
   const [selectedStock, setSelectedStock] = useState("google");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStockPrice, setSelectedStockPrice] = useState(0);
-  const [portfolios, setPortfolios] = useState([
-    {
-      name: "Portfolio 1",
-      dummyData: [
-        { label: "AMZ", stock: "amazon", quantity: 10, price: 1500 },
-        { label: "GOOGL", stock: "google", quantity: 20, price: 2500 },
-        { label: "MS", stock: "microsoft", quantity: 15, price: 1800 },
-      ],
-    },
-  ]);
+  const [portfolios, setPortfolios] = useState([]);
+  const dispatch = useDispatch();
+  const user_id = useSelector((state) => state.auth.user_id);
+ 
+  const successMessage = useSelector(
+    (state) => state.userPortfolio.message
+  );
+
+  console.log(successMessage)
 
   const openModal = (stock) => {
-    const foundStock = CurrentMarketData.find((item) => item.code === stock.stock);
+    const foundStock = CurrentMarketData.find(
+      (item) => item.code === stock.stock
+    );
     if (foundStock) {
       setSelectedStock(foundStock.code);
       setSelectedStockPrice(foundStock.priceNetVariation);
@@ -39,16 +44,22 @@ const PortfolioPage = () => {
     setSelectedStock("google");
   };
 
-  const addPortfolio = () => {
+  const addPortfolio = (e) => {
+    e.preventDefault();
     if (name) {
-      setPortfolios((prevPortfolios) => [
-        ...prevPortfolios,
-        {
-          name: name,
-          dummyData: [], // You can initialize this with the initial portfolio data
-        },
-      ]);
-      setName("");
+      console.log("THERE");
+      dispatch(
+        createUserPortfolio({
+          user_id,
+          name,
+          successCallback: () => {
+            console.log("ohhh")
+            toast.success(successMessage);
+            //fetch all userPorfolios
+          },
+        })
+      );
+      setName("")
     }
   };
 
@@ -56,6 +67,7 @@ const PortfolioPage = () => {
     <div className="container-fluid">
       <Navbar />
       <PageHeading title="Portfolio Overview" />
+      <ToastContainer />
       <div className="container">
         <div className="p-3 align-items-center ">
           <h5>Create Portfolio</h5>
@@ -77,6 +89,8 @@ const PortfolioPage = () => {
           >
             add
           </button>
+     
+       {portfolios.length === 0 && <div  style={{width: "500px"}} className="container mt-2 align-items-center bg-light border-1 rounded-2 w-3"><p className="p-3">You have no portfolio. create one before you can buy stocks.. </p></div> }  
         </div>
         {isModalOpen && (
           <div className="modal-wrapper">

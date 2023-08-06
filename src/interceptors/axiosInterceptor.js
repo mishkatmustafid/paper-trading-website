@@ -10,7 +10,6 @@ axiosInstance.interceptors.request.use(
     // Check if the request is not for login or sign up routes
     if (!config.url.includes("/signin") && !config.url.includes("/signup")) {
       const token = localStorage.getItem("token");
-      console.log(token);
       if (token) {
         config.headers["Authorization"] = `Bearer ${token}`;
       }

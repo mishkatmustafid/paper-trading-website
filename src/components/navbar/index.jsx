@@ -15,17 +15,15 @@ const Navbar = ({full_name}) => {
   };
 
   return (
-    <nav className="container-fluid navbar px-3 navbar-expand-lg bg-light fixed-top shadow px-2">
-      <Link to={"/dashboard"}>
+    <nav className="container-fluid navbar  px-3 navbar-expand-lg bg-light fixed-top shadow px-2">
+      <Link style={{fontFamily : "inherit", fontWeight: "bolder", color: "#e39246"}} className="navbar-brand  text-decoration-none " to={"/dashboard"}>
         <img
           src={require("../../assets/trade_logo.png")}
           alt=""
           className="mx-2"
           style={{ height: "50px" }}
         />
-        <span className="navbar-brand fs-6 text-decoration-none ">
           Paper Trading
-        </span>
       </Link>
       <button
         className="navbar-toggler"
