@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./index.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/features/auth/authSlice";
-const Navbar = ({full_name}) => {
+import { fetchUser } from "../../redux/features/user/userSlice";
+const Navbar = () => {
+  const user_id = useSelector((state) => state.auth.user_id);
+  const user = useSelector((state) => state.user.user);
 
   const dispatch = useDispatch();
   const navigate =useNavigate();
@@ -13,6 +16,10 @@ const Navbar = ({full_name}) => {
     dispatch(logout());
     navigate("/");
   };
+  
+  useEffect(() => {
+    dispatch(fetchUser(user_id));
+  }, [user_id, dispatch])
 
   return (
     <nav className="container-fluid navbar  px-3 navbar-expand-lg bg-light fixed-top shadow px-2">
@@ -49,8 +56,13 @@ const Navbar = ({full_name}) => {
             </Link>
           </li>
           <li className="nav-item">
-            <Link to={"/transactions"} className="nav-link fs-6">
-              Transactions
+            <Link to={"/pendingOrders"} className="nav-link fs-6">
+              Pending Orders
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link to={"/executedOrders"} className="nav-link fs-6">
+              Executed Orders
             </Link>
           </li>
           <li className="nav-item">
@@ -66,7 +78,7 @@ const Navbar = ({full_name}) => {
         </ul>
       </div>
       <ul className="navbar-nav ml-auto">
-        <li className='nav-item px-3'>{full_name}</li>
+        <li className='nav-item px-3'> {user?.full_name.toUpperCase()}</li>
         <FontAwesomeIcon
           onClick={handleLogout}
           icon={faSignOutAlt}

@@ -19,11 +19,12 @@ export const createUserPortfolio = createAsyncThunk(
         name: name,
       });
 
-      const { status, message,  details } = response.data;
-
+      const { status, message, details } = response.data;
+         thunkAPI.dispatch(fetchAllUserPortfolio(user_id));
       if (successCallback) successCallback();
 
-      return { status,message, details };
+   
+      return { status, message, details };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -115,7 +116,7 @@ const userPortfoliio = createSlice({
       })
       .addCase(fetchAllUserPortfolio.fulfilled, (state, action) => {
         state.loading = false;
-        state.focus = action.payload.details;
+        state.collection = action.payload.details;
       })
       .addCase(fetchAllUserPortfolio.rejected, (state, action) => {
         state.loading = false;

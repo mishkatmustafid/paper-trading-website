@@ -1,37 +1,51 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import StockCircle from "../../components/stockCircle";
 import "./index.css";
-import {
-  faGoogle,
-  faBitcoin,
-  faAmazon,
-  faApple,
-  faFacebook,
-  faMicrosoft,
-} from "@fortawesome/free-brands-svg-icons";
+// import {
+//   faGoogle,
+//   faBitcoin,
+//   faAmazon,
+//   faApple,
+//   faFacebook,
+//   faMicrosoft,
+// } from "@fortawesome/free-brands-svg-icons";
 import MarketOrders from "../../components/marketOrders";
 import SingleStock from "../../components/Graph/SingleStock";
 import CurrentMarket from "../../components/currentMarket";
 import Modal from "react-modal";
 import PurchaseForm from "../../components/purchase-form";
-import { CurrentMarketData, stockData } from "../../Utils/marketData";
+import { stockData } from "../../Utils/marketData";
 import Navbar from "../../components/navbar";
 import PageHeading from "../../components/page-heading";
 import WithAuth from "../../components/withAuth";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchStocks } from "../../redux/features/stock/stockSlice";
+import { fetchAllUserPortfolio } from "../../redux/features/userPortfolio/userPortfolioSlice";
 
 const MarketOverview = () => {
   const [selectedStock, setSelectedStock] = useState("google");
+  const [selectedStockId, setSelectedStockId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStockPrice, setSelectedStockPrice] = useState(0);
 
+  const user_id = useSelector((state) => state.auth.user_id);
+  // const token = useSelector((state) => state.auth.token); Decode the user id from the token instead
+
+  const userPortfolios = useSelector((state) => state.userPortfolio.collection);
+  const dispatch = useDispatch();
+
+  const activeStocks = useSelector((state) => state.stock.collection);
+
   const openModal = (stock) => {
-    console.log(stock);
-    const foundStock = CurrentMarketData.find((item) => item.code === stock);
-    console.log("found", foundStock)
+    console.log( "dfsdf"+stock)
+    const foundStock = activeStocks.find((item) => item.name.toLowerCase() === stock);
     if (foundStock) {
-      setSelectedStock(foundStock.code);
-      setSelectedStockPrice(foundStock.priceNetVariation);
+      setSelectedStockId(foundStock.asset_id)
+      setSelectedStock(foundStock.name.toLowerCase());
+      setSelectedStockPrice(foundStock.current_price);
       setIsModalOpen(true);
+    }else{
+      console.log("lkkkkkkkk")
     }
   };
 
@@ -41,18 +55,30 @@ const MarketOverview = () => {
     setSelectedStock("google");
   };
 
-  const stockListData = [
-    { icon: faAmazon, stockName: "amazon" },
-    { icon: faBitcoin, stockName: "bitcoin" },
-    { icon: faGoogle, stockName: "google" },
-    { icon: faApple, stockName: "apple" },
-    { icon: faFacebook, stockName: "facebook" },
-    { icon: faMicrosoft, stockName: "microsoft" },
-  ];
+
+
+  // const stockListData = [
+  //   { icon: faAmazon, stockName: "amazon" },
+  //   { icon: faBitcoin, stockName: "bitcoin" },
+  //   { icon: faGoogle, stockName: "google" },
+  //   { icon: faApple, stockName: "apple" },
+  //   { icon: faFacebook, stockName: "facebook" },
+  //   { icon: faMicrosoft, stockName: "microsoft" },
+  // ];
+
+  // function getFaIconName(inputString) {
+  //   const capitalized = inputString.charAt(0).toUpperCase() + inputString.slice(1);
+  //   return `fa${capitalized}`;
+  // }
 
   const handleListClick = (stockName) => {
     setSelectedStock(stockName);
   };
+
+  useEffect(() => {
+    dispatch(fetchAllUserPortfolio(user_id));
+    dispatch(fetchStocks())
+  },[])
 
   return (
     <div className="container-fluid">
@@ -63,15 +89,17 @@ const MarketOverview = () => {
           <div className="container">
             <h6 className="text-center">Avialable Products</h6>
             <ol className="scroll-container list-unstyled p-3  border rounded">
-              {stockListData.map((item) => {
+              {activeStocks.map((item) => {
                 return (
                   <li
-                    key={item.stockName}
-                    value={item.stockName}
-                    onClick={() => handleListClick(item.stockName)}
+                    key={item.name}
+                    value={item.name.toLowerCase()}
+                    onClick={() => handleListClick(item.name.trim().toLowerCase())}
                     className="mb-2 p-2 border rounded"
                   >
-                    <StockCircle icon={item.icon} stockName={item.stockName} />
+                    <StockCircle 
+                 //   icon={getFaIconName(item.name.toLowerCase())} 
+                    stockName={item.name.toLowerCase()} />
                   </li>
                 );
               })}
@@ -79,7 +107,7 @@ const MarketOverview = () => {
           </div>
           <div>
             <hr />
-            <CurrentMarket openModal={openModal} />
+            <CurrentMarket activeStocks={activeStocks} openModal={openModal} />
             {isModalOpen && (
               <div className="modal-wrapper">
                 <Modal
@@ -88,12 +116,12 @@ const MarketOverview = () => {
                   onRequestClose={closeModal}
                 >
                   <PurchaseForm
-                    stock={selectedStock}
-                    currentPrice={parseFloat(
-                      selectedStockPrice.substring(1)
-                    )}
+                    stock={selectedStock.toLowerCase()}
+                    currentPrice={parseFloat(selectedStockPrice)}
                     closeModal={closeModal}
                     buttonTitle={"buy/sell"}
+                    portfolios={userPortfolios}
+                    stockId={selectedStockId}
                   />
                 </Modal>
               </div>
@@ -104,7 +132,7 @@ const MarketOverview = () => {
           <div className="col-md-8">
             <div>
               <SingleStock
-                data={stockData[selectedStock].graphData} // Use the graphData for the selected stock
+                data={stockData[selectedStock].graphData} 
                 title={selectedStock}
               />
               <div className="row bg-light">

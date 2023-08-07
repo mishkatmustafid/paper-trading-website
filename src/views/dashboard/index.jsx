@@ -5,45 +5,59 @@ import { faCalculator, faWallet } from "@fortawesome/free-solid-svg-icons";
 import Navbar from "../../components/navbar";
 import PortfoliosOverviewGraph from "../../components/Graph/PortfoliosOverviewGraph";
 import CurrentMarket from "../../components/currentMarket";
-import { CurrentMarketData } from "../../Utils/marketData";
 import Modal from "react-modal";
 import PurchaseForm from "../../components/purchase-form";
 import DepositCard from "../../components/depositCard";
 import TransactionHistory from "../../components/transaction-history";
 import PortfolioCard from "../../components/portfolioCard";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import WithAuth from "../../components/withAuth";
 import { fetchUser } from "../../redux/features/user/userSlice";
+import { fetchAllUserPortfolio } from "../../redux/features/userPortfolio/userPortfolioSlice";
+import { fetchStocks } from "../../redux/features/stock/stockSlice";
+import { CurrentMarketData } from "../../Utils/marketData";
 //import { decodedToken } from "../../interceptors/jwtDecoder";
 
 const Dashboard = () => {
   const [selectedStock, setSelectedStock] = useState("google");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStockPrice, setSelectedStockPrice] = useState(0);
+  const [selectedStockId, setSelectedStockId] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
- // const token = useSelector((state) => state.auth.token); Decode the user id from the token instead
   const user_id = useSelector((state) => state.auth.user_id);
-  const user = useSelector((state) => state.user.user);
+  // const token = useSelector((state) => state.auth.token); Decode the user id from the token instead
+
+  const userPortfolios = useSelector((state) => state.userPortfolio.collection);
 
   //console.log(decodedToken(token))
   const handleClick = () => {
     navigate("/portfolio");
   };
 
+  const activeStocks = useSelector((state) => state.stock.collection);
+  console.log("hello" + activeStocks);
+
   useEffect(() => {
+    dispatch(fetchStocks());
+    dispatch(fetchStocks());
     dispatch(fetchUser(user_id));
-  }, [])
+    dispatch(fetchAllUserPortfolio(user_id));
+  }, [user_id, dispatch]);
 
+  const openModal = (stockName) => {
+    const foundStock = activeStocks.find(
+      (item) => item.name.toLowerCase() === stockName
+    );
 
-  const openModal = (stock) => {
-    const foundStock = CurrentMarketData.find((item) => item.code === stock);
-    console.log("found", foundStock);
     if (foundStock) {
-      setSelectedStock(foundStock.code);
-      setSelectedStockPrice(foundStock.priceNetVariation);
+      setSelectedStockId(foundStock.asset_id);
+      setSelectedStock(foundStock.name);
+      setSelectedStockPrice(foundStock.current_price);
       setIsModalOpen(true);
+    } else {
+      console.log(`Stock not found: ${stockName}`);
     }
   };
 
@@ -124,9 +138,7 @@ const Dashboard = () => {
 
   return (
     <div className="positon-fixed  no-srollbar">
-      <Navbar
-        full_name={user && user.full_name.toUpperCase()}
-      />
+      <Navbar />
       <div className="container-fluid vh-100 bg-white">
         <div className="row">
           <div
@@ -167,7 +179,7 @@ const Dashboard = () => {
             className=" col-md-10  vh-100 p-5 "
           >
             <div className="scrollable-content">
-              <div className="row border mb-4">
+              <div className="row p-3 border mb-4">
                 <div className="col-md-8">
                   <PortfoliosOverviewGraph portfolios={portfolios} />
                 </div>
@@ -204,10 +216,13 @@ const Dashboard = () => {
                   </div>
                 </div>
               </div>
-              <div className="row border mb-4">
-                <div className="col-md-8">
+              <div className="row border p-3 mb-4">
+                <div className="col-md-7">
                   <h2 className="text-center fs-5">Active Stocks</h2>
-                  <CurrentMarket openModal={openModal} />
+                  <CurrentMarket
+                    activeStocks={activeStocks}
+                    openModal={openModal}
+                  />
                   {isModalOpen && (
                     <div className="modal-wrapper">
                       <Modal
@@ -216,64 +231,89 @@ const Dashboard = () => {
                         onRequestClose={closeModal}
                       >
                         <PurchaseForm
-                          stock={selectedStock}
-                          currentPrice={parseFloat(
-                            selectedStockPrice.substring(1)
-                          )}
+                          stock={selectedStock.toLowerCase()}
+                          currentPrice={parseFloat(selectedStockPrice)}
                           closeModal={closeModal}
                           buttonTitle={"buy/sell"}
+                          portfolios={userPortfolios}
+                          stockId={selectedStockId}
                         />
                       </Modal>
                     </div>
                   )}
                 </div>
-                <div
-                  onClick={() => navigate("/transactions")}
-                  className="col-md-4"
-                >
-                  <h2 className="text-center fs-5">Pending Orders</h2>
-                  <table className="table table-striped border">
-                    <thead className="thead-light">
-                      <tr>
-                        <th className="bg-gray">stock</th>
-                        <th className="bg-gray">amount (USD)</th>
-                        <th className="bg-gray">side</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {pendingOrders.map((item, index) => (
-                        <tr key={index}>
-                          <td>{item.stock}</td>
-                          <td>{item.amount}</td>
-                          <td>{item.side}</td>
+                <div className="col-md-5">
+                  <h2  style={{ cursor: "pointer" }} onClick={() => navigate("/pendingOrders")} className="text-center fs-5">Pending Orders</h2>
+                  <div
+                    style={{ maxHeight: "700px", overflowY: "auto" }}
+                    
+                  >
+                    <table className="table table-striped border">
+                      <thead className="thead-light">
+                        <tr>
+                          <th className="bg-gray">stock</th>
+                          <th className="bg-gray">amount (USD)</th>
+                          <th className="bg-gray">side</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {pendingOrders.map((item, index) => (
+                          <tr key={index}>
+                            <td>{item.stock}</td>
+                            <td>{item.amount}</td>
+                            <td>{item.side}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
-              <div className="row border mb-4">
-                <div className="col-md-8">
+              <div className="row p-3 border mb-4">
+                <div className="col-md-7">
                   <h2 className="text-center fs-5">Transaction History</h2>
                   <TransactionHistory marketData={CurrentMarketData} />
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-5">
                   <h2 className="text-center fs-5">Portfolios</h2>
-                  <PortfolioCard
-                    handleClick={handleClick}
-                    name="Portfolio 1"
-                    amountTraded={890}
-                  />
-                  <PortfolioCard
-                    handleClick={handleClick}
-                    name="Portfolio 2"
-                    amountTraded={8950}
-                  />
-                  <PortfolioCard
-                    handleClick={handleClick}
-                    name="Portfolio 3"
-                    amountTraded={490}
-                  />
+                  <p>
+                    click{" "}
+                    <Link className="text-decoration-none" to={"/portfolio"}>
+                      here{" "}
+                    </Link>
+                    to add another one..
+                  </p>
+
+                  {!userPortfolios && (
+                    <p>
+                      No portfolios , click{" "}
+                      <Link className="text-decoration-none" to={"/portfolio"}>
+                        here
+                      </Link>{" "}
+                      to add one..
+                    </p>
+                  )}
+
+                  <div
+                    className="border p-3"
+                    style={{ maxHeight: "400px", overflowY: "auto" }}
+                  >
+                    {userPortfolios?.map((port) => {
+                      const totalValue = port.portfolio_stocks.reduce(
+                        (total, stock) => total + stock.total_investment,
+                        0
+                      );
+                      return (
+                        <PortfolioCard
+                          key={port?.id} // Make sure to include a unique key for each item in the list
+                          symbol={port?.name.substring(0, 1).toUpperCase()}
+                          handleClick={handleClick}
+                          name={port?.name}
+                          amountTraded={totalValue}
+                        />
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             </div>

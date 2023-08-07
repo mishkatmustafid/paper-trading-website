@@ -5,4 +5,7 @@ export const endopoints = {
   signup: `${BASE_URL}/users/signup`,
   getUserDetails: (user_id) => `${BASE_URL}/users/${user_id}/details`,
   portfolio: (user_id) => `${BASE_URL}/portfolio/${user_id}`,
+  asset: `${BASE_URL}/assets`,
+  order: (portfolioId) => `${BASE_URL}/transaction/${portfolioId}`,
+  portfolioStock: (portfolioId) => `${BASE_URL}/portfolio_stock/${portfolioId}`,
 };

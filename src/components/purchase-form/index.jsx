@@ -1,14 +1,30 @@
 import React, { useState, useEffect } from "react";
 import "./index.css";
 import SpinnerLoader from "../spinner";
-const PurchaseForm = ({ stock, currentPrice, closeModal, buttonTitle }) => {
+import { useDispatch, useSelector } from "react-redux";
+import { createOrder } from "../../redux/features/order/orderSlice";
+import { ToastContainer, toast } from "react-toastify";
+import { format } from "date-fns";
+import { createPortfolioStock } from "../../redux/features/portfolioStock/portfolioStockSlice";
+const PurchaseForm = ({
+  stock,
+  currentPrice,
+  closeModal,
+  buttonTitle,
+  portfolios,
+  stockId,
+}) => {
   const [quantity, setQuantity] = useState("");
   const [total, setTotal] = useState("");
-  const [price, setPrice] = useState();
+  const [price, setPrice] = useState("");
   const [orderType, setOrdertype] = useState("");
   const [portfolio, setPortfolio] = useState("");
   const [side, setSide] = useState("");
-  const [loading, setLoading] = useState(false)
+
+  const loading = useSelector((state) => state.order.loading);
+  const message = useSelector((state) => state.order.message);
+  const message1 = useSelector((state) => state.portfolioStock.message);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     calculateTotal(quantity, price);
@@ -23,21 +39,47 @@ const PurchaseForm = ({ stock, currentPrice, closeModal, buttonTitle }) => {
     setTotal(total);
   };
 
-
   const handleSubmit = (e) => {
-    setLoading(true)
     e.preventDefault();
+
+    const currentDate = new Date();
+    const formattedDate = format(currentDate, "yyyy-MM-dd'T'HH:mm:ss");
+
+    const data = {
+      asset_id: encodeURI(stockId),
+      transaction_type: side,
+      transaction_status: "PENDING",
+      transaction_date: formattedDate,
+      transaction_price: parseFloat(price),
+      quantity: parseFloat(quantity),
+      order_type: orderType,
+      transaction_value: parseFloat(total),
+    };
+
+    const dataa = {
+      asset_id: encodeURI (stockId),
+      asset_name: stock,
+      quantity:parseFloat(quantity),
+      purchase_date: formattedDate,
+      purchase_price: parseFloat(price),
+      total_investment: parseFloat(total),
+    };
+
+    dispatch(
+      createOrder({ data: data, portfolio_id: portfolio }, () => {
+        toast.success(message);
+      })
+    );
+
+    dispatch(
+      createPortfolioStock({ data: dataa, portfolio_id: portfolio }, () => {
+        toast.success(message1);
+      })
+    );
     // Perform purchase logic here
     console.log("Purchase submitted:", {
-      stock,
-      quantity,
-      price,
-      total,
-      orderType,
-      portfolio,
+      data,
     });
-  
-    //closeModal();
   };
 
   return (
@@ -45,6 +87,7 @@ const PurchaseForm = ({ stock, currentPrice, closeModal, buttonTitle }) => {
       style={{ width: "800px", marginTop: "90px" }}
       className="container p-3 shadow-lg bg-light rounded border d-flex justify-content-center align-items-center"
     >
+      <ToastContainer />
       <div className="image1 col-md-6 mx-4">
         <h4 className="justify-content-md-start">
           trade <em className="text-secondary">{stock}</em>
@@ -113,25 +156,25 @@ const PurchaseForm = ({ stock, currentPrice, closeModal, buttonTitle }) => {
             className="form-control"
             required
           >
-            <option>select side </option> <option value="buy">BUY</option>{" "}
-            <option value="sell">SELL</option>
+            <option>select side </option> <option value="BUY">BUY</option>{" "}
+            <option value="SELL">SELL</option>
           </select>
         </div>
         <div className="form-group">
           <label className="p-1" htmlFor="totalInput">
             Portfolio
           </label>
+
           <select
             id="portfolio"
-            value={portfolio}
             onChange={(e) => setPortfolio(e.target.value)}
             className="form-control"
             required
           >
             <option>select portfolio </option>{" "}
-            <option value="porfolio1">PORT 1</option>{" "}
-            <option value="porfolio2">PORT 2</option>
-            <option value="porfolio2">PORT 3</option>
+            {portfolios?.map((portfolio) => (
+              <option value={portfolio.portfolio_id}>{portfolio.name}</option>
+            ))}
           </select>
         </div>
         <div className="form-group mb-3">
@@ -146,19 +189,18 @@ const PurchaseForm = ({ stock, currentPrice, closeModal, buttonTitle }) => {
             required
           >
             <option>select order type</option>{" "}
-            <option value="limitOrder">MARKET ORDER</option>{" "}
-            <option value="marketOrder">LIMIT ORDER</option>
+            <option value="MARKET">MARKET ORDER</option>{" "}
+            <option value="LIMIT">LIMIT ORDER</option>
           </select>
         </div>
-      
+
         <div className="d-flex justify-content-between">
           <button
             style={{ width: "100px" }}
             type="submit"
             className="btn btn-primary btn-sm m-1"
           >
-      
-         { loading ? <SpinnerLoader /> : buttonTitle}
+            {loading ? <SpinnerLoader /> : buttonTitle}
           </button>
           <button
             type="button"

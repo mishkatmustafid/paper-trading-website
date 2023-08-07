@@ -1,41 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./index.css";
 import MyPieChart from "../../components/piechart";
 import PageHeading from "../../components/page-heading";
 import Navbar from "../../components/navbar";
 import PurchaseForm from "../../components/purchase-form";
-import { CurrentMarketData } from "../../Utils/marketData";
 import Modal from "react-modal";
 import WithAuth from "../../components/withAuth";
-import { createUserPortfolio } from "../../redux/features/userPortfolio/userPortfolioSlice";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {
+  createUserPortfolio,
+  fetchAllUserPortfolio,
+} from "../../redux/features/userPortfolio/userPortfolioSlice";
 
 const PortfolioPage = () => {
   const [name, setName] = useState("");
   const [selectedStock, setSelectedStock] = useState("google");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStockPrice, setSelectedStockPrice] = useState(0);
-  const [portfolios, setPortfolios] = useState([]);
   const dispatch = useDispatch();
+
   const user_id = useSelector((state) => state.auth.user_id);
- 
-  const successMessage = useSelector(
-    (state) => state.userPortfolio.message
-  );
+  const userPortfolios = useSelector((state) => state.userPortfolio.collection);
+  const successMessage = useSelector((state) => state.userPortfolio.message);
 
-  console.log(successMessage)
+  // Fetch user portfolios
+  useEffect(() => {
+    dispatch(fetchAllUserPortfolio(user_id));
+  }, [user_id, dispatch]);
 
-  const openModal = (stock) => {
-    const foundStock = CurrentMarketData.find(
-      (item) => item.code === stock.stock
-    );
-    if (foundStock) {
-      setSelectedStock(foundStock.code);
-      setSelectedStockPrice(foundStock.priceNetVariation);
-      setIsModalOpen(true);
-    }
+  const openModal = (stock, price) => {
+    setSelectedStock(stock);
+    setSelectedStockPrice(price);
+    setIsModalOpen(true);
   };
 
   const closeModal = () => {
@@ -47,19 +46,17 @@ const PortfolioPage = () => {
   const addPortfolio = (e) => {
     e.preventDefault();
     if (name) {
-      console.log("THERE");
       dispatch(
         createUserPortfolio({
           user_id,
           name,
           successCallback: () => {
-            console.log("ohhh")
             toast.success(successMessage);
-            //fetch all userPorfolios
+            dispatch(fetchAllUserPortfolio(user_id));
           },
         })
       );
-      setName("")
+      setName("");
     }
   };
 
@@ -78,7 +75,7 @@ const PortfolioPage = () => {
             onChange={(e) => setName(e.target.value)}
             value={name}
             className="form-control-lg custom-input"
-            placeholder="enter name of new portfolio"
+            placeholder="Enter name of new portfolio"
             id="name"
             type="text"
           />
@@ -87,10 +84,19 @@ const PortfolioPage = () => {
             onClick={addPortfolio}
             className="btn btn-secondary btn-lg m-2"
           >
-            add
+            Add
           </button>
-     
-       {portfolios.length === 0 && <div  style={{width: "500px"}} className="container mt-2 align-items-center bg-light border-1 rounded-2 w-3"><p className="p-3">You have no portfolio. create one before you can buy stocks.. </p></div> }  
+
+          {userPortfolios.length === 0 && (
+            <div
+              style={{ width: "500px" }}
+              className="container mt-2 align-items-center bg-light border-1 rounded-2 w-3"
+            >
+              <p className="p-3">
+                You have no portfolio. Create one before you can buy stocks.
+              </p>
+            </div>
+          )}
         </div>
         {isModalOpen && (
           <div className="modal-wrapper">
@@ -101,58 +107,94 @@ const PortfolioPage = () => {
             >
               <PurchaseForm
                 stock={selectedStock}
-                currentPrice={parseFloat(selectedStockPrice.substring(1))}
+                currentPrice={parseFloat(selectedStockPrice)}
                 closeModal={closeModal}
-                buttonTitle={"sell"}
+                buttonTitle={"Sell"}
+                portfolios={userPortfolios}
               />
             </Modal>
           </div>
         )}
 
-        {portfolios.map((portfolio, index) => (
-          <div key={index} className="container">
-            <div className="row mb-3 border">
-              <div className="p-4 col-md-8">
-                <h3 className="p-3">{portfolio.name}</h3>
-                <table className="p-3 table border table-striped">
-                  <thead>
-                    <tr>
-                      <th>Stock</th>
-                      <th>Quantity</th>
-                      <th>Price</th>
-                      <th></th>
-                      <th>Sell</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {portfolio.dummyData.map((order, orderIndex) => (
-                      <tr key={orderIndex}>
-                        <td>{order.label}</td>
-                        <td>{order.quantity}</td>
-                        <td className="text-danger">{order.price}</td>
-                        <td className="text text-success">
-                          <span>↑</span>{" "}
-                          <span className="text text-primary">↓</span>{" "}
-                        </td>
-                        <td>
-                          <button
-                            onClick={() => openModal(order)}
-                            className="btn btn-secondary"
-                          >
-                            sell
-                          </button>
-                        </td>
+        {userPortfolios.map((portfolio, index) => {
+          // Calculate total value of stocks in the portfolio
+          const totalValue = portfolio.portfolio_stocks.reduce(
+            (total, stock) => total + stock.total_investment,
+            0
+          );
+
+          return (
+            <div key={index} className="container">
+              <div className="row mb-3 border">
+                <div className="p-4 col-md-8">
+                  <div className="d-flex justify-content-around">
+                    <h3 className="p-3">{portfolio.name}</h3>
+                    <h5 className="p-3 text-success"> {totalValue || 0} BDT</h5>
+                  </div>
+
+                  <table className="p-3 table border table-striped">
+                    <thead>
+                      <tr>
+                        <th>Stock</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th></th>
+                        <th>Sell</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <div className="p-4 col-md-4">
-                <MyPieChart />
+                    </thead>
+                    <tbody>
+                      {portfolio.portfolio_stocks.length > 0 ? (
+                        portfolio.portfolio_stocks.map((stock, stockIndex) => (
+                          <tr key={stockIndex}>
+                            <td>{stock.asset_name.toLowerCase()}</td>
+                            <td>{stock.quantity}</td>
+                            <td className="text-danger">
+                              {stock.purchase_price}
+                            </td>
+                            <td className="text-danger">
+                              {stock.total_investment}
+                            </td>
+                            <td className="text text-success">
+                              <span>↑</span>{" "}
+                              <span className="text text-primary">↓</span>
+                            </td>
+                            <td>
+                              <button
+                                onClick={() =>
+                                  openModal(
+                                    stock.asset_name.toLowerCase(),
+                                    stock.purchase_price
+                                  )
+                                }
+                                className="btn btn-secondary"
+                              >
+                                Sell
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan="6">
+                            <p>
+                              You don't own any stock in this portfolio. Click{" "}
+                              <Link to="/marketOverview">here</Link> to purchase
+                              from the market.
+                            </p>
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="p-4 col-md-4">
+                <MyPieChart portfolioStocks={portfolio.portfolio_stocks} />
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
