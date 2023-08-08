@@ -11,13 +11,11 @@ const initialState = {
 
 export const createOrder = createAsyncThunk(
   "order/createOrder",
-  async ({data, portfolio_id} ,successCallback, thunkAPI) => {
+  async ({ data, portfolio_id , successCallback}, thunkAPI) => {
     try {
       const response = await axiosInstance.post(
         endopoints.order(portfolio_id),
-        {
-          data,
-        }
+        data
       );
 
       const { status, details, message } = response.data;
@@ -26,7 +24,7 @@ export const createOrder = createAsyncThunk(
         successCallback();
       }
 
-      return { status,message, details };
+      return { status, message, details };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }

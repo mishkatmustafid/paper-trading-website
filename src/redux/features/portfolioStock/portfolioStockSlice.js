@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosInstance from "../../../interceptors/axiosInterceptor";
 import { endopoints } from "../../../Utils/endopoints";
 
-
 const initialState = {
   collection: [],
   focus: null,
@@ -11,16 +10,13 @@ const initialState = {
   error: null,
 };
 
-
 export const createPortfolioStock = createAsyncThunk(
   "portfolio_stock/createPortfolioStock",
-  async ({data, portfolio_id} ,successCallback, thunkAPI) => {
+  async ({ data, portfolio_id }, successCallback, thunkAPI) => {
     try {
       const response = await axiosInstance.post(
         endopoints.portfolioStock(portfolio_id),
-        {
-          data,
-        }
+        data
       );
 
       const { status, details, message } = response.data;
@@ -29,7 +25,7 @@ export const createPortfolioStock = createAsyncThunk(
         successCallback();
       }
 
-      return { status,message, details };
+      return { status, message, details };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -61,33 +57,33 @@ const portfolioStockSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-    .addCase(createPortfolioStock.pending, (state, action) => {
-      state.loading = true;
-      state.error = null;
-    })
-    .addCase(createPortfolioStock.fulfilled, (state, action) => {
-      state.loading = false;
-      state.error = null;
-      state.message = action.payload.message;
-    })
-    .addCase(createPortfolioStock.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    })
+      .addCase(createPortfolioStock.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createPortfolioStock.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.message = action.payload.message;
+      })
+      .addCase(createPortfolioStock.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
 
-    .addCase(fetchPortfolioStocks.pending, (state, action) => {
-      state.loading = true;
-      state.error = null;
-    })
-    .addCase(fetchPortfolioStocks.fulfilled, (state, action) => {
-      state.loading = false;
-      state.error = null;
-      state.collection = action.payload.details;
-    })
-    .addCase(fetchPortfolioStocks.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    });
+      .addCase(fetchPortfolioStocks.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchPortfolioStocks.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.collection = action.payload.details;
+      })
+      .addCase(fetchPortfolioStocks.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 

@@ -4,16 +4,19 @@ import SpinnerLoader from "../spinner";
 import { useDispatch, useSelector } from "react-redux";
 import { createOrder } from "../../redux/features/order/orderSlice";
 import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { format } from "date-fns";
-import { createPortfolioStock } from "../../redux/features/portfolioStock/portfolioStockSlice";
+import Modal from "react-modal";
+
 const PurchaseForm = ({
   stock,
   currentPrice,
-  closeModal,
   buttonTitle,
+  closeModal,
   portfolios,
   stockId,
 }) => {
+  Modal.setAppElement("#root");
   const [quantity, setQuantity] = useState("");
   const [total, setTotal] = useState("");
   const [price, setPrice] = useState("");
@@ -23,7 +26,7 @@ const PurchaseForm = ({
 
   const loading = useSelector((state) => state.order.loading);
   const message = useSelector((state) => state.order.message);
-  const message1 = useSelector((state) => state.portfolioStock.message);
+  //const message1 = useSelector((state) => state.portfolioStock.message);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -35,7 +38,7 @@ const PurchaseForm = ({
   };
 
   const calculateTotal = (quantity, price) => {
-    const total = quantity * price;
+    const total = parseFloat(quantity * price);
     setTotal(total);
   };
 
@@ -45,7 +48,7 @@ const PurchaseForm = ({
     const currentDate = new Date();
     const formattedDate = format(currentDate, "yyyy-MM-dd'T'HH:mm:ss");
 
-    const data = {
+    const transactionPayload = {
       asset_id: encodeURI(stockId),
       transaction_type: side,
       transaction_status: "PENDING",
@@ -56,30 +59,29 @@ const PurchaseForm = ({
       transaction_value: parseFloat(total),
     };
 
-    const dataa = {
-      asset_id: encodeURI (stockId),
-      asset_name: stock,
-      quantity:parseFloat(quantity),
-      purchase_date: formattedDate,
-      purchase_price: parseFloat(price),
-      total_investment: parseFloat(total),
-    };
+    // const portfolioStockPayload = {
+    //   asset_id: encodeURI (stockId),
+    //   asset_name: stock,
+    //   quantity:parseFloat(quantity),
+    //   purchase_date: formattedDate,
+    //   purchase_price: parseFloat(price),
+    //   total_investment: parseFloat(total),
+    // };
 
     dispatch(
-      createOrder({ data: data, portfolio_id: portfolio }, () => {
-        toast.success(message);
+      createOrder({
+        data: transactionPayload,
+        portfolio_id: portfolio,
+        successCallback: () => {
+          toast.success(message || "Successfully created the Transaction!");
+          setPrice("");
+          setQuantity("");
+          setSide("");
+          setPortfolio("");
+          setOrdertype("");
+        },
       })
     );
-
-    dispatch(
-      createPortfolioStock({ data: dataa, portfolio_id: portfolio }, () => {
-        toast.success(message1);
-      })
-    );
-    // Perform purchase logic here
-    console.log("Purchase submitted:", {
-      data,
-    });
   };
 
   return (
@@ -87,7 +89,7 @@ const PurchaseForm = ({
       style={{ width: "800px", marginTop: "90px" }}
       className="container p-3 shadow-lg bg-light rounded border d-flex justify-content-center align-items-center"
     >
-      <ToastContainer />
+      <ToastContainer position="bottom-right" />
       <div className="image1 col-md-6 mx-4">
         <h4 className="justify-content-md-start">
           trade <em className="text-secondary">{stock}</em>
@@ -173,7 +175,12 @@ const PurchaseForm = ({
           >
             <option>select portfolio </option>{" "}
             {portfolios?.map((portfolio) => (
-              <option value={portfolio.portfolio_id}>{portfolio.name}</option>
+              <option
+                key={portfolio.portfolio_id}
+                value={portfolio.portfolio_id}
+              >
+                {portfolio.name}
+              </option>
             ))}
           </select>
         </div>
