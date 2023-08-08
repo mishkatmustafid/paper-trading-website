@@ -18,6 +18,7 @@ import {
 const PortfolioPage = () => {
   const [name, setName] = useState("");
   const [selectedStock, setSelectedStock] = useState("google");
+  const [selectedStockId, setSelectedStockId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStockPrice, setSelectedStockPrice] = useState(0);
   const dispatch = useDispatch();
@@ -31,8 +32,9 @@ const PortfolioPage = () => {
     dispatch(fetchAllUserPortfolio(user_id));
   }, [user_id, dispatch]);
 
-  const openModal = (stock, price) => {
+  const openModal = (stock, price , id) => {
     setSelectedStock(stock);
+    setSelectedStockId(id)
     setSelectedStockPrice(price);
     setIsModalOpen(true);
   };
@@ -51,7 +53,7 @@ const PortfolioPage = () => {
           user_id,
           name,
           successCallback: () => {
-            toast.success(successMessage);
+            toast.success(successMessage || "Successfully created the Portfolio!");
             dispatch(fetchAllUserPortfolio(user_id));
           },
         })
@@ -106,12 +108,14 @@ const PortfolioPage = () => {
               onRequestClose={closeModal}
             >
               <PurchaseForm
-                stock={selectedStock}
+                stock={selectedStock.toLowerCase()}
                 currentPrice={parseFloat(selectedStockPrice)}
                 closeModal={closeModal}
-                buttonTitle={"Sell"}
+                buttonTitle={"buy/sell"}
                 portfolios={userPortfolios}
+                stockId={selectedStockId}
               />
+             
             </Modal>
           </div>
         )}
@@ -164,7 +168,8 @@ const PortfolioPage = () => {
                                 onClick={() =>
                                   openModal(
                                     stock.asset_name.toLowerCase(),
-                                    stock.purchase_price
+                                    stock.purchase_price,
+                                    stock.asset_id
                                   )
                                 }
                                 className="btn btn-secondary"
