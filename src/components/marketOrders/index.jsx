@@ -1,11 +1,9 @@
 import React from "react";
 
-const MarketOrders = ({title, marketData}) => {
- 
-
+const MarketOrders = ({ title, marketData }) => {
   return (
     <div className="contaner">
-        <h6>{title}</h6>
+      <h6>{title}</h6>
       <table className="table text-dark border fs-6 text">
         <thead>
           <tr>

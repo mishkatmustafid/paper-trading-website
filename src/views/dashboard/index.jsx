@@ -233,7 +233,7 @@ const Dashboard = () => {
               <div className="row p-3 border mb-4">
                 <div className="col-md-7">
                   <h2 className="text-center fs-5">Transaction History</h2>
-                  <TransactionHistory marketData={CurrentMarketData} />
+                  <TransactionHistory  marketData={pendingOrders} />
                 </div>
                 <div className="col-md-5">
                   <h2 className="text-center fs-5">Portfolios</h2>

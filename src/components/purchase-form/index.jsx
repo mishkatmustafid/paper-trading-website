@@ -24,6 +24,7 @@ const PurchaseForm = ({
   const [orderType, setOrdertype] = useState("");
   const [portfolio, setPortfolio] = useState("");
   const [side, setSide] = useState("");
+  const [error, setError] = useState("");
 
   const loading = useSelector((state) => state.order.loading);
   const message = useSelector((state) => state.order.message);
@@ -31,7 +32,12 @@ const PurchaseForm = ({
 
   useEffect(() => {
     calculateTotal(quantity, price);
-  }, [quantity, price]);
+    if (error) {
+      setTimeout(() => {
+        setError("");
+      }, [2000]);
+    }
+  }, [quantity, price, error]);
 
   const handleQuantityChange = (e) => {
     setQuantity(e.target.value);
@@ -67,7 +73,10 @@ const PurchaseForm = ({
       purchase_price: parseFloat(price),
       total_investment: parseFloat(total),
     };
-
+    if (transactionPayload.order_type === "LIMIT") {
+      setError("limit orders are not available for now");
+      return;
+    }
 
     dispatch(
       createPortfolioStock({
@@ -100,7 +109,6 @@ const PurchaseForm = ({
         },
       })
     );
-
   };
 
   return (
@@ -219,7 +227,7 @@ const PurchaseForm = ({
             <option value="LIMIT">LIMIT ORDER</option>
           </select>
         </div>
-
+        <div>{error && <span className="text-danger">{error}</span>}</div>
         <div className="d-flex justify-content-between">
           <button
             style={{ width: "100px" }}

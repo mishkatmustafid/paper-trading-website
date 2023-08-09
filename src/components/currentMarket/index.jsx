@@ -3,7 +3,6 @@ import React from "react";
 
 
 const CurrentMarket = ({activeStocks, openModal }) => {
-  console.log(activeStocks)
   
   return (
     <div className="container ">

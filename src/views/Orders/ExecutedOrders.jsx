@@ -37,7 +37,7 @@ const ExecutedOrders = () => {
             </tr>
           </thead>
           <tbody>
-            {portfolioStocks.length > 0 &&
+            {Array.isArray(portfolioStocks) && portfolioStocks.length > 0 &&
               portfolioStocks.map((order, index) => (
                 <tr key={index}>
                   <td>{order.asset_name}</td>
@@ -57,7 +57,7 @@ const ExecutedOrders = () => {
         </table>
       </div>
       <div>
-        {portfolioStocks.length === 0  && <span>You have no executed orders</span>}
+     { !Array.isArray(portfolioStocks) &&  <span>You have no executed orders</span>}
       </div>
     </div>
   );
