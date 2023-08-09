@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { createOrder } from "../../redux/features/order/orderSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { format } from "date-fns";
 import Modal from "react-modal";
+import { createPortfolioStock } from "../../redux/features/portfolioStock/portfolioStockSlice";
+import { format } from "date-fns";
 
 const PurchaseForm = ({
   stock,
@@ -26,7 +27,6 @@ const PurchaseForm = ({
 
   const loading = useSelector((state) => state.order.loading);
   const message = useSelector((state) => state.order.message);
-  //const message1 = useSelector((state) => state.portfolioStock.message);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -59,14 +59,29 @@ const PurchaseForm = ({
       transaction_value: parseFloat(total),
     };
 
-    // const portfolioStockPayload = {
-    //   asset_id: encodeURI (stockId),
-    //   asset_name: stock,
-    //   quantity:parseFloat(quantity),
-    //   purchase_date: formattedDate,
-    //   purchase_price: parseFloat(price),
-    //   total_investment: parseFloat(total),
-    // };
+    const portfolioStockPayload = {
+      asset_id: encodeURI(stockId),
+      asset_name: stock,
+      quantity: parseFloat(quantity),
+      purchase_date: formattedDate,
+      purchase_price: parseFloat(price),
+      total_investment: parseFloat(total),
+    };
+
+
+    dispatch(
+      createPortfolioStock({
+        data: portfolioStockPayload,
+        portfolio_id: portfolio,
+        successCallback: () => {
+          setPrice("");
+          setQuantity("");
+          setSide("");
+          setPortfolio("");
+          setOrdertype("");
+        },
+      })
+    );
 
     dispatch(
       createOrder({
@@ -79,9 +94,13 @@ const PurchaseForm = ({
           setSide("");
           setPortfolio("");
           setOrdertype("");
+          setTimeout(() => {
+            closeModal();
+          }, [1000]);
         },
       })
     );
+
   };
 
   return (

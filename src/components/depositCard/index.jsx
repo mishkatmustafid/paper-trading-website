@@ -33,7 +33,7 @@ const DepositCard = () => {
             </button>
           </div>
           <div className="card-body d-flex flex-row">
-            <h5> Balance: $ {balance}</h5>
+            <span className="card-text">{balance} BDT</span>
           </div>
         </div>
       </div>

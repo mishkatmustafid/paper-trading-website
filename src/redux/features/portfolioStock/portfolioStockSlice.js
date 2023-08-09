@@ -36,7 +36,26 @@ export const fetchPortfolioStocks = createAsyncThunk(
   "portfolio_stock/fetchPortfolioStocks",
   async (portfolio_id, successCallback, thunkAPI) => {
     try {
-      const response = await axiosInstance.post(endopoints.order(portfolio_id));
+      const response = await axiosInstance.post(endopoints.portfolioStock(portfolio_id));
+
+      const { status, details } = response.data;
+
+      if (successCallback && typeof successCallback === "function") {
+        successCallback();
+      }
+
+      return { status, details };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const fetchAllPortfolioStocks = createAsyncThunk(
+  "portfolio_stock/fetchAllPortfolioStocks",
+  async ({user_id, successCallback}, thunkAPI) => {
+    try {
+      const response = await axiosInstance.get(endopoints.allPortfolioStocks(user_id));
 
       const { status, details } = response.data;
 
@@ -81,6 +100,19 @@ const portfolioStockSlice = createSlice({
         state.collection = action.payload.details;
       })
       .addCase(fetchPortfolioStocks.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchAllPortfolioStocks.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAllPortfolioStocks.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.collection = action.payload.details;
+      })
+      .addCase(fetchAllPortfolioStocks.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

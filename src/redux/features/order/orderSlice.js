@@ -50,6 +50,26 @@ export const fetchOrders = createAsyncThunk(
   }
 );
 
+export const fetchAllOrders= createAsyncThunk(
+  "portfolio_stock/fetchAllOrders",
+  async ({user_id, successCallback}, thunkAPI) => {
+    try {
+      const response = await axiosInstance.get(endopoints.allOrders(user_id));
+
+      const { status, details } = response.data;
+
+      if (successCallback && typeof successCallback === "function") {
+        successCallback();
+      }
+      
+
+      return { status, details };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const orderSlice = createSlice({
   name: "order",
   initialState,
@@ -80,6 +100,19 @@ const orderSlice = createSlice({
         state.collection = action.payload.details;
       })
       .addCase(fetchOrders.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchAllOrders.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchAllOrders.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.collection = action.payload.details;
+      })
+      .addCase(fetchAllOrders.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

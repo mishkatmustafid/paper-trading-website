@@ -89,7 +89,7 @@ const PortfolioPage = () => {
             Add
           </button>
 
-          {userPortfolios.length === 0 && (
+          {userPortfolios === undefined && (
             <div
               style={{ width: "500px" }}
               className="container mt-2 align-items-center bg-light border-1 rounded-2 w-3"
@@ -120,7 +120,7 @@ const PortfolioPage = () => {
           </div>
         )}
 
-        {userPortfolios.map((portfolio, index) => {
+        {userPortfolios?.map((portfolio, index) => {
           // Calculate total value of stocks in the portfolio
           const totalValue = portfolio.portfolio_stocks.reduce(
             (total, stock) => total + stock.total_investment,
@@ -128,8 +128,8 @@ const PortfolioPage = () => {
           );
 
           return (
-            <div key={index} className="container">
-              <div className="row mb-3 border">
+            <div key={index} className="container ">
+              <div className="row mb-3 border rounded-5">
                 <div className="p-4 col-md-8">
                   <div className="d-flex justify-content-around">
                     <h3 className="p-3">{portfolio.name}</h3>

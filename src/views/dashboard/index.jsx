@@ -17,6 +17,7 @@ import { fetchUser } from "../../redux/features/user/userSlice";
 import { fetchAllUserPortfolio } from "../../redux/features/userPortfolio/userPortfolioSlice";
 import { fetchStocks } from "../../redux/features/stock/stockSlice";
 import { CurrentMarketData } from "../../Utils/marketData";
+import { fetchAllOrders } from "../../redux/features/order/orderSlice";
 //import { decodedToken } from "../../interceptors/jwtDecoder";
 
 const Dashboard = () => {
@@ -30,16 +31,16 @@ const Dashboard = () => {
   // const token = useSelector((state) => state.auth.token); Decode the user id from the token instead
 
   const userPortfolios = useSelector((state) => state.userPortfolio.collection);
+  const pendingOrders = useSelector((state) => state.order.collection);
 
-  //console.log(decodedToken(token))
   const handleClick = () => {
     navigate("/portfolio");
   };
 
   const activeStocks = useSelector((state) => state.stock.collection);
-  console.log("hello" + activeStocks);
 
   useEffect(() => {
+    dispatch(fetchAllOrders({ user_id }));
     dispatch(fetchStocks());
     dispatch(fetchStocks());
     dispatch(fetchUser(user_id));
@@ -67,72 +68,6 @@ const Dashboard = () => {
     setSelectedStock("google");
   };
 
-  const pendingOrders = [
-    {
-      side: "Buy",
-      stock: "AAPL",
-      amount: 10,
-    },
-    {
-      side: "Sell",
-      stock: "GOOGL",
-      amount: 5,
-    },
-    {
-      side: "Buy",
-      stock: "MSFT",
-      amount: 7,
-    },
-    {
-      side: "Sell",
-      stock: "AMZN",
-      amount: 3,
-    },
-  ];
-
-  const portfolios = [
-    {
-      name: "Portfolio 1",
-      stocks: [
-        { name: "Stock A", value: 50 },
-        { name: "Stock B", value: 30 },
-        { name: "Stock C", value: 70 },
-      ],
-    },
-    {
-      name: "Portfolio 2",
-      stocks: [
-        { name: "Stock A", value: 80 },
-        { name: "Stock B", value: 40 },
-        { name: "Stock C", value: 60 },
-      ],
-    },
-    {
-      name: "Portfolio 3",
-      stocks: [
-        { name: "Stock A", value: 20 },
-        { name: "Stock B", value: 60 },
-        { name: "Stock C", value: 40 },
-      ],
-    },
-    {
-      name: "Portfolio 4",
-      stocks: [
-        { name: "Stock A", value: 50 },
-        { name: "Stock B", value: 80 },
-        { name: "Stock C", value: 70 },
-      ],
-    },
-    {
-      name: "Portfolio 5",
-      stocks: [
-        { name: "Stock A", value: 50 },
-        { name: "Stock B", value: 90 },
-        { name: "Stock C", value: 70 },
-        { name: "Stock D", value: 70 },
-      ],
-    },
-  ];
   const totalAmount = 7000;
   const numberOfTrades = 245;
 
@@ -181,7 +116,7 @@ const Dashboard = () => {
             <div className="scrollable-content">
               <div className="row p-3 border mb-4">
                 <div className="col-md-8">
-                  <PortfoliosOverviewGraph portfolios={portfolios} />
+                  <PortfoliosOverviewGraph portfolios={userPortfolios} />
                 </div>
                 <div className="col-md-4 p-5">
                   <div className="row  justify-content-center mb-5 align-items-center">
@@ -189,8 +124,8 @@ const Dashboard = () => {
                       <div className="card-body d-flex flex-row justify-content-between">
                         <FontAwesomeIcon icon={faWallet} className="fa-3x" />
                         <div>
-                          <h3 className="card-title fs-6 fw-bold">
-                            ${totalAmount}
+                          <h3 className="card-title card-text fs-6 fw-bold">
+                            {totalAmount} BDT
                           </h3>
                           <p className="card-text">Amount Traded</p>
                         </div>
@@ -243,11 +178,14 @@ const Dashboard = () => {
                   )}
                 </div>
                 <div className="col-md-5">
-                  <h2  style={{ cursor: "pointer" }} onClick={() => navigate("/pendingOrders")} className="text-center fs-5">Pending Orders</h2>
-                  <div
-                    style={{ maxHeight: "700px", overflowY: "auto" }}
-                    
+                  <h2
+                    style={{ cursor: "pointer" }}
+                    onClick={() => navigate("/pendingOrders")}
+                    className="text-center fs-5"
                   >
+                    Pending Orders
+                  </h2>
+                  <div style={{ maxHeight: "700px", overflowY: "auto" }}>
                     <table className="table table-striped border">
                       <thead className="thead-light">
                         <tr>
@@ -257,15 +195,38 @@ const Dashboard = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {pendingOrders.map((item, index) => (
-                          <tr key={index}>
-                            <td>{item.stock}</td>
-                            <td>{item.amount}</td>
-                            <td>{item.side}</td>
-                          </tr>
-                        ))}
+                        {userPortfolios &&
+                          (Array.isArray(pendingOrders) &&
+                          pendingOrders.length > 0 ? (
+                            pendingOrders.slice(0,7).map((item, index) => (
+                              <tr key={index}>
+                                <td>{item.asset_name}</td>
+                                <td>{item.transaction_price}</td>
+                                <td>{item.transaction_price}</td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr>
+                              <td colSpan="3">No pending orders</td>
+                            </tr>
+                          ))}
                       </tbody>
                     </table>
+                  </div>
+                  <div>
+                    {userPortfolios && pendingOrders?.length > 6 && (
+                      <span>
+                        click{" "}
+                        <Link
+                          style={{ textDecoration: "none" }}
+                          to={"/pendingOrders"}
+                        >
+                          here
+                        </Link>{" "}
+                        for more
+                      </span>
+                    )}
+                    {!userPortfolios && <span>You have no pending orders</span>}
                   </div>
                 </div>
               </div>
@@ -276,13 +237,6 @@ const Dashboard = () => {
                 </div>
                 <div className="col-md-5">
                   <h2 className="text-center fs-5">Portfolios</h2>
-                  <p>
-                    click{" "}
-                    <Link className="text-decoration-none" to={"/portfolio"}>
-                      here{" "}
-                    </Link>
-                    to add another one..
-                  </p>
 
                   {!userPortfolios && (
                     <p>
@@ -298,21 +252,22 @@ const Dashboard = () => {
                     className="border p-3"
                     style={{ maxHeight: "400px", overflowY: "auto" }}
                   >
-                    {userPortfolios?.map((port) => {
-                      const totalValue = port.portfolio_stocks.reduce(
-                        (total, stock) => total + stock.total_investment,
-                        0
-                      );
-                      return (
-                        <PortfolioCard
-                          key={port?.id} // Make sure to include a unique key for each item in the list
-                          symbol={port?.name.substring(0, 1).toUpperCase()}
-                          handleClick={handleClick}
-                          name={port?.name}
-                          amountTraded={totalValue}
-                        />
-                      );
-                    })}
+                    {userPortfolios &&
+                      userPortfolios?.map((port) => {
+                        const totalValue = port.portfolio_stocks.reduce(
+                          (total, stock) => total + stock.total_investment,
+                          0
+                        );
+                        return (
+                          <PortfolioCard
+                            key={port?.id} // Make sure to include a unique key for each item in the list
+                            symbol={port?.name.substring(0, 1).toUpperCase()}
+                            handleClick={handleClick}
+                            name={port?.name}
+                            amountTraded={totalValue}
+                          />
+                        );
+                      })}
                   </div>
                 </div>
               </div>
