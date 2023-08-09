@@ -16,7 +16,6 @@ import WithAuth from "../../components/withAuth";
 import { fetchUser } from "../../redux/features/user/userSlice";
 import { fetchAllUserPortfolio } from "../../redux/features/userPortfolio/userPortfolioSlice";
 import { fetchStocks } from "../../redux/features/stock/stockSlice";
-import { CurrentMarketData } from "../../Utils/marketData";
 import { fetchAllOrders } from "../../redux/features/order/orderSlice";
 //import { decodedToken } from "../../interceptors/jwtDecoder";
 

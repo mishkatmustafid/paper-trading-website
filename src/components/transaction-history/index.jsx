@@ -1,3 +1,4 @@
+import moment from "moment";
 import React from "react";
 
 const TransactionHistory = ({ marketData }) => {
@@ -11,7 +12,7 @@ const TransactionHistory = ({ marketData }) => {
             <th>Side</th>
             <th>Date</th>
             <th>Stock</th>
-          </tr>
+          </tr>           
         </thead>
         <tbody>
           {Array.isArray(marketData) && marketData.length > 0 ? (
@@ -20,7 +21,7 @@ const TransactionHistory = ({ marketData }) => {
                 <td>{data.quantity}</td>
                 <td>{data.transaction_price}</td>
                 <td className="text-danger">{data.transaction_type}</td>
-                <td className="text-muted">{data.transaction_date}</td>
+              <td  className="text-muted"> {moment(data.transaction_date).format("HH:mm A MM/DD/YYYY")}</td>
                 <td>{data.asset_name}</td>
               </tr>
             ))
