@@ -1,6 +1,6 @@
 import React from "react";
 
-const TransactionHistory = ({ marketData}) => {
+const TransactionHistory = ({ marketData }) => {
   return (
     <div className="contaner">
       <table className="table text-dark border fs-6 text">
@@ -14,15 +14,21 @@ const TransactionHistory = ({ marketData}) => {
           </tr>
         </thead>
         <tbody>
-          {marketData.map((data, index) => (
-            <tr key={index}>
-              <td>{index % 3 === 0 ? "899" : "675"}</td>
-              <td>{index % 2 === 0 ? "0.97" : "5.77"}</td>
-              <td className="text-danger">{index % 2 === 0 ? "SELL" : "BUY"}</td>
-              <td className="text-muted">24th June 2021 14:54</td>
-              <td>{index % 3 === 0 ? "AMZ" : "GOOGL"}</td>
+          {Array.isArray(marketData) && marketData.length > 0 ? (
+            marketData.map((data, index) => (
+              <tr key={index}>
+                <td>{data.quantity}</td>
+                <td>{data.transaction_price}</td>
+                <td className="text-danger">{data.transaction_type}</td>
+                <td className="text-muted">{data.transaction_date}</td>
+                <td>{data.asset_name}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="3">No transactions</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </div>

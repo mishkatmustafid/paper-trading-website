@@ -1,3 +1,21 @@
 .nav-item :hover {
   text-decoration: underline;
 }
+/* Add these styles to your existing CSS file */
+
+.user-name {
+  font-weight: bold;
+  color: #333;
+  padding: 0.5rem;
+}
+
+.logout-icon {
+  color: #e39246;
+  height: 25px;
+  width: 25px;
+  cursor: pointer;
+}
+
+.nav-link.active {
+  color: #e39246 !important;
+}

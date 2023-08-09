@@ -5,8 +5,8 @@ const DepositCard = () => {
   const [balance, setBalance] = useState(987);
 
   const handleClick = () => {
+    if (amount === "") return;
     setBalance(parseFloat(amount) + parseFloat(balance));
-    console.log(balance);
   };
 
   return (
@@ -16,7 +16,9 @@ const DepositCard = () => {
           <div>
             <input
               style={{ width: "150px", height: "50px" }}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={(e) => {
+              setAmount(e.target.value);
+              }}
               value={amount}
               className="form-control-lg p-2 custom-input"
               placeholder="enter amount "
@@ -31,7 +33,7 @@ const DepositCard = () => {
             </button>
           </div>
           <div className="card-body d-flex flex-row">
-            <h5> Balance: $ {balance}</h5>
+            <span className="card-text">{balance} BDT</span>
           </div>
         </div>
       </div>

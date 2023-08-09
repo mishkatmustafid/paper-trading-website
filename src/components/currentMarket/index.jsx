@@ -1,8 +1,8 @@
 import React from "react";
-import { CurrentMarketData } from "../../Utils/marketData";
 
 
-const CurrentMarket = ({ openModal }) => {
+
+const CurrentMarket = ({activeStocks, openModal }) => {
   
   return (
     <div className="container ">
@@ -16,16 +16,16 @@ const CurrentMarket = ({ openModal }) => {
           </tr>
         </thead>
         <tbody>
-          {CurrentMarketData.map((item, index) => (
+          {activeStocks?.map((item, index) => (
             <tr key={index}>
-              <td>{item.code}</td>
-              <td>{item.marketCap}</td>
-              <td>{item.priceNetVariation}</td>
+              <td>{item.name}</td>
+              <td>{item.market_cap}</td>
+              <td>{item.current_price}</td>
               <td>
                 <button
                   className="btn btn-success"
            
-                  onClick={() => openModal(item.code)}
+                  onClick={() => openModal(item.name.toLowerCase())}
                 >buy / sell</button>
               </td>
             </tr>
