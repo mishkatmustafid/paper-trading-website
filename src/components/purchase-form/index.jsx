@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createOrder } from "../../redux/features/order/orderSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Modal from "react-modal";
+
 import { createPortfolioStock } from "../../redux/features/portfolioStock/portfolioStockSlice";
 import { format } from "date-fns";
 
@@ -17,7 +17,6 @@ const PurchaseForm = ({
   portfolios,
   stockId,
 }) => {
-  Modal.setAppElement("#root");
   const [quantity, setQuantity] = useState("");
   const [total, setTotal] = useState("");
   const [price, setPrice] = useState("");
@@ -224,7 +223,9 @@ const PurchaseForm = ({
           >
             <option>select order type</option>{" "}
             <option value="MARKET">MARKET ORDER</option>{" "}
-            <option value="LIMIT" disabled>LIMIT ORDER</option>
+            <option value="LIMIT" disabled>
+              LIMIT ORDER
+            </option>
           </select>
         </div>
         <div>{error && <span className="text-danger">{error}</span>}</div>

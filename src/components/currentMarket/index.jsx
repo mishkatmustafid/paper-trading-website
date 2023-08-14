@@ -1,9 +1,6 @@
 import React from "react";
 
-
-
-const CurrentMarket = ({activeStocks, openModal }) => {
-  
+const CurrentMarket = ({ activeStocks, openModal }) => {
   return (
     <div className="container ">
       <table className="table border">
@@ -24,16 +21,15 @@ const CurrentMarket = ({activeStocks, openModal }) => {
               <td>
                 <button
                   className="btn btn-success"
-           
                   onClick={() => openModal(item.name.toLowerCase())}
-                >buy / sell</button>
+                >
+                  buy / sell
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-     
     </div>
   );
 };
