@@ -1,5 +1,5 @@
 import React from "react";
-import { VictoryPie } from "victory-pie";
+import { Chart } from "react-google-charts";
 
 const MyPieChart = ({ portfolioStocks }) => {
   const calculateChartData = (stocks) => {
@@ -8,10 +8,7 @@ const MyPieChart = ({ portfolioStocks }) => {
       0
     );
 
-    return stocks.map((stock) => ({
-      x: stock.asset_name.toUpperCase(),
-      y: (stock.total_investment / totalInvestment) * 100,
-    }));
+    return stocks.map((stock) => [stock.asset_name.toLowerCase(), (stock.total_investment / totalInvestment) * 100]);
   };
 
   const chartData = portfolioStocks.length > 0 ? calculateChartData(portfolioStocks) : [];
@@ -19,11 +16,20 @@ const MyPieChart = ({ portfolioStocks }) => {
   return (
     <div>
       {chartData.length > 0 ? (
-        <VictoryPie
-          data={chartData}
-          colorScale={["blue", "yellow", "red","green", "brown", "voilet"]}  // You can adjust the color scale as needed
-          radius={100}
-        />
+        <div>
+          <Chart
+            width={"100%"}
+            height={"400px"}
+            chartType="PieChart"
+            loader={<div>Loading Chart</div>}
+            data={[["Stock", "Percentage"], ...chartData]}
+            options={{
+              pieSliceText: "none",
+              legend: { position: "none" },
+              chartArea: { left: 20, top: 20, width: "80%", height: "80%" },
+            }}
+          />
+        </div>
       ) : (
         <p className="p-5">No data available for the pie chart.</p>
       )}

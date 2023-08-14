@@ -24,6 +24,7 @@ const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStockPrice, setSelectedStockPrice] = useState(0);
   const [selectedStockId, setSelectedStockId] = useState(null);
+  //const [refreshData, setRefreshData] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user_id = useSelector((state) => state.auth.user_id);
@@ -65,6 +66,8 @@ const Dashboard = () => {
     setIsModalOpen(false);
     setSelectedStockPrice(0);
     setSelectedStock("google");
+    dispatch(fetchAllOrders({ user_id }));
+    dispatch(fetchAllUserPortfolio(user_id));
   };
 
   const totalAmount = 7000;
@@ -201,7 +204,7 @@ const Dashboard = () => {
                               <tr key={index}>
                                 <td>{item.asset_name}</td>
                                 <td>{item.transaction_price}</td>
-                                <td>{item.transaction_price}</td>
+                                <td>{item.transaction_type}</td>
                               </tr>
                             ))
                           ) : (

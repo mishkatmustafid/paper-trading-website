@@ -16,10 +16,10 @@ const LandingPage = () => {
   return (
     <div className="landing-page">
       <div className="content">
-        <h2>Welcome to our Forex platform</h2>
+        <h2>Welcome to Paper Trading Platform</h2>
         <p>Buy stocks easily with our user-friendly platform.</p>
         <Link to="/register">
-          <button className="btn btn-success btn-lg">Register</button>
+          <button className="btn btn-success btn-lg my-3">Register</button>
         </Link>
         <span>
           Already have an account with us?{" "}

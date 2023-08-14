@@ -24,7 +24,7 @@ export const loginUser = createAsyncThunk(
         password,
       });
 
-      const { status, details } = response.data;
+      const { details } = response.data;
 
       localStorage.setItem("token", details.access_token);
       localStorage.setItem("userId", details.user_id);
@@ -35,7 +35,7 @@ export const loginUser = createAsyncThunk(
       thunkAPI.dispatch(updateUserId(details.user_id));
       thunkAPI.dispatch(updateToken(details.access_token));
       thunkAPI.dispatch(updateUserAuth(true));
-      return { status, details };
+      return { details };
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -53,9 +53,7 @@ export const signupUser = createAsyncThunk(
       });
       
       const { status, details } = response.data;
-      console.log('====================================');
-      console.log(details);
-      console.log('====================================');
+   
       localStorage.setItem("token", details.access_token);
       localStorage.setItem("userId", details.user_id);
       localStorage.setItem("isAuthenticated", true);

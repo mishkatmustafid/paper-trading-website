@@ -21,6 +21,8 @@ const PortfolioPage = () => {
   const [selectedStockId, setSelectedStockId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStockPrice, setSelectedStockPrice] = useState(0);
+  const [refreshData, setRefreshData] = useState(false);
+
   const dispatch = useDispatch();
 
   const user_id = useSelector((state) => state.auth.user_id);
@@ -30,7 +32,8 @@ const PortfolioPage = () => {
   // Fetch user portfolios
   useEffect(() => {
     dispatch(fetchAllUserPortfolio(user_id));
-  }, [user_id, dispatch]);
+    setRefreshData(false);
+  }, [user_id, dispatch, refreshData]);
 
   const openModal = (stock, price , id) => {
     setSelectedStock(stock);
@@ -43,6 +46,7 @@ const PortfolioPage = () => {
     setIsModalOpen(false);
     setSelectedStockPrice(0);
     setSelectedStock("google");
+    setRefreshData(true)
   };
 
   const addPortfolio = (e) => {

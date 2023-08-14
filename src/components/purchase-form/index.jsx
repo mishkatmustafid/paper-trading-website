@@ -224,7 +224,7 @@ const PurchaseForm = ({
           >
             <option>select order type</option>{" "}
             <option value="MARKET">MARKET ORDER</option>{" "}
-            <option value="LIMIT">LIMIT ORDER</option>
+            <option value="LIMIT" disabled>LIMIT ORDER</option>
           </select>
         </div>
         <div>{error && <span className="text-danger">{error}</span>}</div>
