@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from "react";
 import StockCircle from "../../components/stockCircle";
 import "./index.css";
-// import {
-//   faGoogle,
-//   faBitcoin,
-//   faAmazon,
-//   faApple,
-//   faFacebook,
-//   faMicrosoft,
-// } from "@fortawesome/free-brands-svg-icons";
 import MarketOrders from "../../components/marketOrders";
 import SingleStock from "../../components/Graph/SingleStock";
 import CurrentMarket from "../../components/currentMarket";
@@ -37,15 +29,17 @@ const MarketOverview = () => {
   const activeStocks = useSelector((state) => state.stock.collection);
 
   const openModal = (stock) => {
-    console.log( "dfsdf"+stock)
-    const foundStock = activeStocks.find((item) => item.name.toLowerCase() === stock);
+    console.log("dfsdf" + stock);
+    const foundStock = activeStocks.find(
+      (item) => item.name.toLowerCase() === stock
+    );
     if (foundStock) {
-      setSelectedStockId(foundStock.asset_id)
+      setSelectedStockId(foundStock.asset_id);
       setSelectedStock(foundStock.name.toLowerCase());
       setSelectedStockPrice(foundStock.current_price);
       setIsModalOpen(true);
-    }else{
-      console.log("lkkkkkkkk")
+    } else {
+      console.log("lkkkkkkkk");
     }
   };
 
@@ -55,30 +49,14 @@ const MarketOverview = () => {
     setSelectedStock("google");
   };
 
-
-
-  // const stockListData = [
-  //   { icon: faAmazon, stockName: "amazon" },
-  //   { icon: faBitcoin, stockName: "bitcoin" },
-  //   { icon: faGoogle, stockName: "google" },
-  //   { icon: faApple, stockName: "apple" },
-  //   { icon: faFacebook, stockName: "facebook" },
-  //   { icon: faMicrosoft, stockName: "microsoft" },
-  // ];
-
-  // function getFaIconName(inputString) {
-  //   const capitalized = inputString.charAt(0).toUpperCase() + inputString.slice(1);
-  //   return `fa${capitalized}`;
-  // }
-
   const handleListClick = (stockName) => {
     setSelectedStock(stockName);
   };
 
   useEffect(() => {
     dispatch(fetchAllUserPortfolio(user_id));
-    dispatch(fetchStocks())
-  },[])
+    dispatch(fetchStocks());
+  }, [dispatch, user_id]);
 
   return (
     <div className="container-fluid">
@@ -94,12 +72,12 @@ const MarketOverview = () => {
                   <li
                     key={item.name}
                     value={item.name.toLowerCase()}
-                    onClick={() => handleListClick(item.name.trim().toLowerCase())}
+                    onClick={() =>
+                      handleListClick(item.name.trim().toLowerCase())
+                    }
                     className="mb-2 p-2 border rounded"
                   >
-                    <StockCircle 
-                 //   icon={getFaIconName(item.name.toLowerCase())} 
-                    stockName={item.name.toLowerCase()} />
+                    <StockCircle stockName={item.name.toLowerCase()} />
                   </li>
                 );
               })}
@@ -119,7 +97,7 @@ const MarketOverview = () => {
                     stock={selectedStock.toLowerCase()}
                     currentPrice={parseFloat(selectedStockPrice)}
                     closeModal={closeModal}
-                    buttonTitle={"buy/sell"}
+                    buttonTitle={"buy"}
                     portfolios={userPortfolios}
                     stockId={selectedStockId}
                   />
@@ -132,7 +110,7 @@ const MarketOverview = () => {
           <div className="col-md-8">
             <div>
               <SingleStock
-                data={stockData[selectedStock].graphData} 
+                data={stockData[selectedStock].graphData}
                 title={selectedStock}
               />
               <div className="row bg-light">

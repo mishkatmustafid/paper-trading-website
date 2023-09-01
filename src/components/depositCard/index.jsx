@@ -17,7 +17,7 @@ const DepositCard = () => {
             <input
               style={{ width: "150px", height: "50px" }}
               onChange={(e) => {
-              setAmount(e.target.value);
+                setAmount(e.target.value);
               }}
               value={amount}
               className="form-control-lg p-2 custom-input"

@@ -24,6 +24,7 @@ const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStockPrice, setSelectedStockPrice] = useState(0);
   const [selectedStockId, setSelectedStockId] = useState(null);
+  //const [refreshData, setRefreshData] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user_id = useSelector((state) => state.auth.user_id);
@@ -65,6 +66,8 @@ const Dashboard = () => {
     setIsModalOpen(false);
     setSelectedStockPrice(0);
     setSelectedStock("google");
+    dispatch(fetchAllOrders({ user_id }));
+    dispatch(fetchAllUserPortfolio(user_id));
   };
 
   const totalAmount = 7000;
@@ -168,7 +171,7 @@ const Dashboard = () => {
                           stock={selectedStock.toLowerCase()}
                           currentPrice={parseFloat(selectedStockPrice)}
                           closeModal={closeModal}
-                          buttonTitle={"buy/sell"}
+                          buttonTitle={"buy"}
                           portfolios={userPortfolios}
                           stockId={selectedStockId}
                         />
@@ -196,12 +199,12 @@ const Dashboard = () => {
                       <tbody>
                         {userPortfolios &&
                           (Array.isArray(pendingOrders) &&
-                          pendingOrders.length > 0 ? (
+                          pendingOrders?.length > 0 ? (
                             pendingOrders.slice(0,7).map((item, index) => (
                               <tr key={index}>
                                 <td>{item.asset_name}</td>
                                 <td>{item.transaction_price}</td>
-                                <td>{item.transaction_price}</td>
+                                <td>{item.transaction_type}</td>
                               </tr>
                             ))
                           ) : (

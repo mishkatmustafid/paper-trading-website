@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { createOrder } from "../../redux/features/order/orderSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Modal from "react-modal";
+
 import { createPortfolioStock } from "../../redux/features/portfolioStock/portfolioStockSlice";
 import { format } from "date-fns";
 
@@ -17,7 +17,6 @@ const PurchaseForm = ({
   portfolios,
   stockId,
 }) => {
-  Modal.setAppElement("#root");
   const [quantity, setQuantity] = useState("");
   const [total, setTotal] = useState("");
   const [price, setPrice] = useState("");
@@ -73,6 +72,17 @@ const PurchaseForm = ({
       purchase_price: parseFloat(price),
       total_investment: parseFloat(total),
     };
+    if (portfolios === undefined) {
+      setError("You have to create a portfolio first");
+    }
+    if (
+      transactionPayload.transaction_type === "" ||
+      transactionPayload.order_type === ""
+    ) {
+      setError("Please select order side and type");
+      return;
+    }
+
     if (transactionPayload.order_type === "LIMIT") {
       setError("limit orders are not available for now");
       return;
@@ -178,16 +188,13 @@ const PurchaseForm = ({
           <label className="p-1" htmlFor="totalInput">
             Side
           </label>
-          <select
+          <input
             id="side"
-            value={side}
+            value={buttonTitle === "buy" ? "BUY" : "SELL"}
             onChange={(e) => setSide(e.target.value)}
             className="form-control"
             required
-          >
-            <option>select side </option> <option value="BUY">BUY</option>{" "}
-            <option value="SELL">SELL</option>
-          </select>
+          />
         </div>
         <div className="form-group">
           <label className="p-1" htmlFor="totalInput">
@@ -224,7 +231,9 @@ const PurchaseForm = ({
           >
             <option>select order type</option>{" "}
             <option value="MARKET">MARKET ORDER</option>{" "}
-            <option value="LIMIT">LIMIT ORDER</option>
+            <option value="LIMIT" disabled>
+              LIMIT ORDER
+            </option>
           </select>
         </div>
         <div>{error && <span className="text-danger">{error}</span>}</div>
