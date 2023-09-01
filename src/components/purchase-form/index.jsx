@@ -72,6 +72,17 @@ const PurchaseForm = ({
       purchase_price: parseFloat(price),
       total_investment: parseFloat(total),
     };
+    if (portfolios === undefined) {
+      setError("You have to create a portfolio first");
+    }
+    if (
+      transactionPayload.transaction_type === "" ||
+      transactionPayload.order_type === ""
+    ) {
+      setError("Please select order side and type");
+      return;
+    }
+
     if (transactionPayload.order_type === "LIMIT") {
       setError("limit orders are not available for now");
       return;
@@ -177,16 +188,13 @@ const PurchaseForm = ({
           <label className="p-1" htmlFor="totalInput">
             Side
           </label>
-          <select
+          <input
             id="side"
-            value={side}
+            value={buttonTitle === "buy" ? "BUY" : "SELL"}
             onChange={(e) => setSide(e.target.value)}
             className="form-control"
             required
-          >
-            <option>select side </option> <option value="BUY">BUY</option>{" "}
-            <option value="SELL">SELL</option>
-          </select>
+          />
         </div>
         <div className="form-group">
           <label className="p-1" htmlFor="totalInput">

@@ -23,7 +23,7 @@ const CurrentMarket = ({ activeStocks, openModal }) => {
                   className="btn btn-success"
                   onClick={() => openModal(item.name.toLowerCase())}
                 >
-                  buy / sell
+                  buy
                 </button>
               </td>
             </tr>

@@ -22,6 +22,7 @@ const PortfolioPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStockPrice, setSelectedStockPrice] = useState(0);
   const [refreshData, setRefreshData] = useState(false);
+  const [error, setError] = useState("");
 
   const dispatch = useDispatch();
 
@@ -33,11 +34,16 @@ const PortfolioPage = () => {
   useEffect(() => {
     dispatch(fetchAllUserPortfolio(user_id));
     setRefreshData(false);
-  }, [user_id, dispatch, refreshData]);
+    if (error) {
+      setTimeout(() => {
+        setError("");
+      }, [2000]);
+    }
+  }, [user_id, error, dispatch, refreshData]);
 
-  const openModal = (stock, price , id) => {
+  const openModal = (stock, price, id) => {
     setSelectedStock(stock);
-    setSelectedStockId(id)
+    setSelectedStockId(id);
     setSelectedStockPrice(price);
     setIsModalOpen(true);
   };
@@ -46,7 +52,7 @@ const PortfolioPage = () => {
     setIsModalOpen(false);
     setSelectedStockPrice(0);
     setSelectedStock("google");
-    setRefreshData(true)
+    setRefreshData(true);
   };
 
   const addPortfolio = (e) => {
@@ -57,12 +63,16 @@ const PortfolioPage = () => {
           user_id,
           name,
           successCallback: () => {
-            toast.success(successMessage || "Successfully created the Portfolio!");
+            toast.success(
+              successMessage || "Successfully created the Portfolio!"
+            );
             dispatch(fetchAllUserPortfolio(user_id));
           },
         })
       );
       setName("");
+    } else {
+      setError("Give the portfolio a name first");
     }
   };
 
@@ -75,6 +85,7 @@ const PortfolioPage = () => {
         <div className="p-3 align-items-center ">
           <h5>Create Portfolio</h5>
         </div>
+
         <div className="pb-5">
           <input
             style={{ width: "500px", height: "50px" }}
@@ -92,7 +103,7 @@ const PortfolioPage = () => {
           >
             Add
           </button>
-
+          <div>{error && <span className="text-danger">{error}</span>}</div>
           {userPortfolios === undefined && (
             <div
               style={{ width: "500px" }}
@@ -115,11 +126,10 @@ const PortfolioPage = () => {
                 stock={selectedStock.toLowerCase()}
                 currentPrice={parseFloat(selectedStockPrice)}
                 closeModal={closeModal}
-                buttonTitle={"buy/sell"}
+                buttonTitle={"sell"}
                 portfolios={userPortfolios}
                 stockId={selectedStockId}
               />
-             
             </Modal>
           </div>
         )}
@@ -198,7 +208,7 @@ const PortfolioPage = () => {
                   </table>
                 </div>
                 <div className="p-4 col-md-4">
-                <MyPieChart portfolioStocks={portfolio.portfolio_stocks} />
+                  <MyPieChart portfolioStocks={portfolio.portfolio_stocks} />
                 </div>
               </div>
             </div>

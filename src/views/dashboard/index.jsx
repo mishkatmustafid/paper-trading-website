@@ -171,7 +171,7 @@ const Dashboard = () => {
                           stock={selectedStock.toLowerCase()}
                           currentPrice={parseFloat(selectedStockPrice)}
                           closeModal={closeModal}
-                          buttonTitle={"buy/sell"}
+                          buttonTitle={"buy"}
                           portfolios={userPortfolios}
                           stockId={selectedStockId}
                         />
@@ -199,7 +199,7 @@ const Dashboard = () => {
                       <tbody>
                         {userPortfolios &&
                           (Array.isArray(pendingOrders) &&
-                          pendingOrders.length > 0 ? (
+                          pendingOrders?.length > 0 ? (
                             pendingOrders.slice(0,7).map((item, index) => (
                               <tr key={index}>
                                 <td>{item.asset_name}</td>
